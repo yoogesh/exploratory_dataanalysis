@@ -1,0 +1,17 @@
+---
+title: "a1q1"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r}
+
+
+```
+
