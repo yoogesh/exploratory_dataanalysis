@@ -1,17 +1,208 @@
 ---
-title: "a1q1"
-output: pdf_document
+title: "EDA Assignment 1 -  Ram Yoogesh"
+output:
+  html_document:
+    df_print: paged
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+## Question 1
+
+### (A)
+## (i)
+### Expressing the ratio as a function of the odds
+
+  \newline
+  $$
+  Pr(X = a)/Pr(X = b) = \frac{\binom{n}{a}p^a (1-p)^{n-a}}{\binom{n}{b}p^b (1-p)^{n-b}} = \frac{\binom{n}{a}}{\binom{n}{b}}p^{a-b}(1-p)^{a-b}
+  $$
+  \newline
+  $$
+   =\frac{\binom{n}{a}}{\binom{n}{b}}odd^{a-b}
+  $$
+  
+## (ii)
+```{r}
+prob_ratio1 <- function(n, a, b, odds =1) {
+  (choose(n,a)/choose(n,b)) * odds^(a-b)
+}
 ```
 
-## R Markdown
+```{r}
+prob_ratio2 <- function (n, a, b, odds =1) {
+  p = odds/(odds + 1)
+  dbinom(a, n, p)/dbinom(b, n, p)
+}
+```
 
+## (iii)
+```{r}
+prob_ratio1(50, a =5, b=45)
+prob_ratio1(50, a=5, b=45, odds =9)
+```
+
+```{r}
+prob_ratio2(50, a =5, b=45)
+prob_ratio2(50, a =5, b=45, odds =9)
+```
+
+
+## (B)
+## (i)
+## Expressing the mathematical expression for the ratio
+## ratio 1
+
+  \newline
+       $$
+        \frac{Pr(\widehat{p}_x = 0)}{Pr(\widehat{p}_y = 0)} \\
+        = \frac{Pr(x/n = 0)}{Pr(y/n = 0)} \\
+        = \frac{Pr(x = 0)}{Pr(y = 0)} \\
+        = \frac{\binom{n}{0}p^0(1-p)^(n-0)}{\binom{m}{0}p^0(1-p)^(m-0)} \\
+        = \frac{(1-p)^n}{(1-p)^m}
+        $$
+        
+## ratio ii
+  \newline
+        $$
+        \frac{Pr(\widehat{p}_x = 1)}{Pr(\widehat{p}_y = 1)} \\
+        = \frac{Pr(x/n = 1)}{Pr(y/n = 1)} \\
+        = \frac{Pr(x = n)}{Pr(y = n)} \\
+        = \frac{\binom{n}{n}p^n(1-p)^(n-n)}{\binom{m}{m}p^m(1-p)^(m-m)} \\
+        = \frac{p^n}{p^m}
+        $$
+
+## (ii)
+
+## For Ratio 1 increases as m increases 
+## For Ratio 2 increases as m increases 
+
+
+## (iii)
+```{r}
+plotfunction1 <- function (n, m, p) {
+  return( (1-p)^ (n-m))
+}
+plotfunction2 <- function (n, m, p) {
+  return ( p ^(n-m))
+}
+```
+
+## calling the relevant functions to plot the graph
+```{r}
+plot(plotfunction1(5, 5:15, 0.5), xlab = "m", ylab ="ratio")
+plot(plotfunction2(5, 5:15, 0.5), xlab = "m", ylab ="ratio")
+```
+
+        
+## (iv)
+## It's more surprising when the sample size is big
+
+
+## (C)
+## (i)
+## Expectation is
+  \newline
+    $$
+    E(\widehat{p}) = E(X/n) = (1/n)E(X) = (1/n)np = p
+    $$
+    
+    
+## Standard deviation is 
+  \newline
+    $$
+    SD(\widehat{p}) = \sqrt{Var(X/n)} = \sqrt{(1/n^2)Var(X)} = \sqrt{(1/n^2)np(1-p)} = \sqrt{p(1-p)/n}
+    $$
+
+## (ii)
+```{r}
+calcsd <- function (n, p) {
+  sqrt(p*(1-p) /n )
+}
+```
+
+
+## (D)
+## (i)
+## Binomial propotion estimator is as follows
+   \newline
+    $$
+    SD(\widehat{p}) = \sqrt{Var(X/n)} = \sqrt{(1/n^2)np(1-p)} = \sqrt{p(1-p)/n}
+    $$
+
+## (ii)
+    \newline
+      $$
+      n = 250^2 p(1-p)
+      $$
+## Plot function is as follows
+```{r}
+ci <- function(p){
+  250^2 * p * (1-p)
+}
+p = seq(0, 1, 0.01)
+plot(p, ci(p), xlab = "p", ylab = "n")
+```
+
+## (E)
+## (i)
+```{r}
+p = seq(0, 1, 0.01)
+sd = calcsd(10, p)
+plot(p, sd, xlab = "p", ylab ="sd")
+abline ( v = which.max(sd)/100, col="red", lwd=3, lty =2)
+
+```
+## (ii)
+```{r}
+n = seq(5, 50, 5)
+p1 = calcsd(n, 0.1)
+p2 = calcsd(n, 0.3)
+p3 = calcsd(n, 0.5)
+p4 = calcsd(n, 0.8)
+plot(n, p1, xlab="n", ylab="sd", type = 'l',lwd = 2,lty=1)
+lines(n, p2, col="red",lwd = 2, lty = 2)
+lines(n, p3, col="blue",lwd = 2, lty = 3)
+lines(n, p4, col="green",lwd = 2, lty = 4)
+legend(40, 0.12, legend=c("p=0.1", "p=0.3","p=0.5","p=0.8"),
+col=c("black", "red","blue","green"), lty=1:4, cex=0.8)
+
+```
+
+## (ii)
+## We can infer from the graph that standard deviation value decreases as p decreases ( in the case of p =0.1, S.D is lowest) and vice versa
+
+## (F)
+## (i)
+
+```{r}
+n = seq(5, 50, 5)
+repvalue = rep(n, each=100)
+propo = rbinom(length(repvalue), size = repvalue, 0.5)
+```
+
+
+## (ii)
+```{r}
+plot(repvalue, propo/repvalue, xlab = "n", ylab = "Propo", ylim=c(0,1), pch = 19, col = adjustcolor("steelblue",0.2), cex =0.5)
+abline(h = 0.5, col ="green", lwd=4, lty=3)
+```
+
+### (iii)
 
 ```{r}
 
-
+plot(jitter(repvalue,2), propo/repvalue, xlab = "jitter", ylab = "Propo", ylim=c(0,1),pch = 19, col = adjustcolor("steelblue",0.2), cex =0.5)
+abline(h = 0.5, col ="green", lwd=4, lty=3)
 ```
+
+## (iv)
+## From the above plots we can conclude that S.D tends to decrease gradually when n increases.
+
+## (G)
+## (i)
+##  Hardest value will be 0.5 because of the fact that the S.D is highest. 
+##  Easiest value will be 0.1 because of the fact that S.S is lowest
+
+## (ii)
+## When you perform a experiment large number of times it is said to be LLN. That is, if you perform the experiment many times the yielded result will be close to the expected value. S.D tends to decrease when the the size increases.
 

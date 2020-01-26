@@ -1,0 +1,188 @@
+---
+title: "EDA-Assignment1 Ram Yoogesh"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+---
+
+## Question 2
+
+## Loading the CSV data 
+
+```{r}
+path_concat <- function(path1, path2, sep="/") {
+paste(path1, path2, sep = sep)
+}
+dataDirectory = "/home/yoogesh/Desktop/stat847assignments/data/"
+data <- read.csv(file = path_concat(dataDirectory, "class_data.csv"))
+
+```
+
+## Previwing the content
+
+```{r}
+#View(data)
+data
+str(data)
+names(data)
+```
+
+
+## 1 
+## a)
+
+### Hypothesis is false if the card a shows the person age less than 19. Hypothesis is true for card b - reason is that it shows the picture of an beverage , so it doesn't matter what age the person is. Hypothesis is false for card c if it shows alcohol else its true. Card d is like b, that is it shows the age is greater than 9, so we dont care about the drink
+
+## b)
+### Cards A and C 
+
+## c)
+   \newline
+   $\binom{2}{2}$ $/$ $\binom{4}{2}$
+   $=$ $\frac{1}{6}$
+
+## d)
+```{r}
+tail(names(sort(table(data$green_card1))), 1)
+
+gc <-tail(names(sort(table(data$green_card2))), 1)
+gc
+
+length(data[data[,4] == gc ,1])
+```
+## Its correct
+
+## e)
+## (i)
+```{r}
+correct_g1 <- ifelse(data$green_card1 =="a" | data$green_card1 =="c", "TRUE", "FALSE")
+correct_g2 <- ifelse(data$green_card2 =="c" | data$green_card2 =="a", "TRUE", "FALSE")
+```
+
+## (ii)
+```{r}
+propo <- prop.table(table(correct_g1))
+propo ["TRUE"]
+choose(2,1)/choose(4,1)
+```
+
+## (iii)
+```{r}
+tot  <- sum(correct_g1== "TRUE" & correct_g2 == "TRUE")
+NROW(correct_g1)
+tot/NROW(correct_g1)
+choose(2,2)/choose(4,2)
+```
+
+## (iv) 
+```{r}
+r = which(correct_g1 =="TRUE")
+sum(correct_g2[r]=="TRUE")/length(r)
+choose(2,1)/choose(4,2)
+```
+
+## (V)
+```{r}
+prop_correct_green <- ifelse(correct_g1 =="TRUE" & correct_g2 =="TRUE", 1, ifelse((correct_g1 =="TRUE" & correct_g2 =="FALSE") | (correct_g1 =="FALSE" & correct_g2 =="TRUE") , 0.5, 0))
+```
+
+```{r}
+hist(prop_correct_green)
+abline( v = mean(prop_correct_green), lwd=3, lty=2, col="green")
+abline( v = median(prop_correct_green), lwd=3, lty=2, col="green")
+```
+
+## (vi)
+### Overall people did well. 
+
+
+## 2)
+
+## a)
+### Hypothesis is true if card a reveals an even number else its false
+### Hypothesis is true since card b has a vowel
+### Hypothesis is true for card c since it shows an even number
+### Hypothesis is true if card d doesn't reveal a vowel else its false
+
+## b)
+### Cards A and D are correct 
+
+## c)
+```{r}
+tail(names(sort(table(data$red_card1))), 1)
+r <- tail(names(sort(table(data$red_card2))), 1)
+length(data[data[,6] ==r ,1])
+r
+```
+### Its wrong
+
+## d)
+##(i)
+
+```{r}
+correct_r1 <- ifelse (data$red_card1 =="a" | data$red_card1 =="d", "TRUE", "FALSE")
+correct_r2 <- ifelse (data$red_card2 =="d" | data$red_card2 =="a", "TRUE", "FALSE")
+```
+
+
+## (ii)
+```{r}
+propo <- prop.table (table(correct_r1))
+propo ["TRUE"]
+choose(2,1)/choose(4,1)
+```
+
+## (iii)
+```{r}
+tot <- sum (correct_r1== "TRUE" & correct_r2 == "TRUE")
+NROW (correct_r1)
+tot/NROW (correct_r1)
+choose(2,2)/choose(4,2)
+```
+
+## (iv) 
+```{r}
+r = which(correct_r1 =="TRUE")
+sum (correct_r2[r]=="TRUE")/length(r)
+choose(2,1)/choose(4,2)
+```
+
+## (v)
+```{r}
+prop_correct_red <- ifelse(correct_r1 =="TRUE" & correct_r2 =="TRUE", 1, ifelse((correct_r1 =="TRUE" & correct_r2 =="FALSE") | (correct_r1 =="FALSE" & correct_r2 =="TRUE") , 0.5, 0))
+hist(prop_correct_red)
+abline( v = mean(prop_correct_red), lwd=3, lty=2, col="green")
+abline( v = median(prop_correct_red), lwd=3, lty=2, col="green")
+```
+## (vi)
+### Overall people performed badly
+
+
+
+## 3)
+## a)
+### Both are same since the probablity is same. 
+ 
+## c)
+## (i)
+ pr(p=0)=
+ $\binom{2}{1}$ $/$ $\binom{4}{2}$
+   $=$ $\frac{1}{3}$
+   
+   pr(p=0.5)=
+ $\binom{2}{1}$ $x$ $\binom{2}{1}$ $/$ $\binom{4}{2}$
+   $=$ $\frac{2}{3}$
+   
+   pr(p=1)=
+ $\binom{2}{1}$  $/$ $\binom{4}{2}$
+   $=$ $\frac{1}{3}$
+   
+## (ii)
+
+$E(p)$ $=$ $0*1/3$ $+$ $1*1/3$ $+$ $0.5*2/3$
+$=$ $0.667$
+
+
+   
+   

@@ -1,0 +1,232 @@
+---
+title: "EDA-Assignment 1 - Ram Yoogesh"
+output: html_notebook
+---
+
+## Question 3
+## Loading the CSV data 
+
+```{r}
+path_concat <- function(path1, path2, sep="/") {
+paste(path1, path2, sep = sep)
+}
+dataDirectory = "/home/yoogesh/Desktop/stat847assignments/data/"
+data <- read.csv(file = path_concat(dataDirectory, "class_data.csv"))
+
+```
+
+## Previwing the content
+
+```{r}
+#View(data)
+data
+str(data)
+names(data)
+```
+
+## a)
+
+$E(D)$ $=$ $(1/10)$ $*$ $(0+1+2+3+4+5+6+7+8+9)$ $=$ $4.5$
+
+## b)
+
+$E(D^2)$ $=$ $\frac{1}{10}$ $*$ $(0^2+1^2+2^2+3^2+4^2+5^2+6^2+7^2+8^2+9^2)$ $=$ $28.5$
+
+$Var(D)$ $=$ $E(D^2)$ $-$ $E(D)^2$ $=$ $28.5$ $-$ $20.25$ $=$ $8.25$
+
+$SD(D)$ $=$ $\sqrt(Var(D))$ $=$ $2.872$
+    
+## c)
+### Median is 4.5
+
+## d)
+## (i)
+### Binom Dist
+
+## (ii)
+$pr(X = x)$ = $\binom{n}{x}$ $(\frac{1}{10})^x$ $*$ $(\frac{9}{10})^{n-x}$ 
+        
+### (iii)
+$E(X)$ = $n$ $*$ $\frac{1}{10}$
+
+
+## e)
+## (i)
+```{r}
+mean(data$random_digit)
+mean(data$student_digit)
+```
+
+## (ii)
+```{r}
+sd(data$random_digit)
+sd(data$student_digit)
+```
+
+## (iii)
+```{r}
+median(data$random_digit)
+median(data$student_digit)
+```
+
+## (iv)
+### RD (Random Digit) 
+### Mean > D
+### S.D = D
+### Median > D
+
+### SD (Student Digit)
+### Mean < D
+### S.D = D
+### Median > D
+
+## (v)
+### Mean and S.D of RD is close to D 
+### Median of SD is close to D
+
+
+## f)
+### when x = 0 
+$\binom{42}{0}$ $*$ $(1/10)^0$ $*$ $(9/10)^{42}$ $=$ $0.01197$ 
+### When x = 5 
+$\binom{42}{5}$ $*$ $(1/10)^5$ $*$ $(9/10)^{37}$ = $0.1724$
+### When x = 10
+$\binom{42}{10}$ $*$ $(1/10)^{10}$ $*$ $(9/10)^{32}$ = $0.0050$
+
+
+
+## 2)
+
+## a)
+## (i)
+```{r}
+stem(data$student_digit)
+```
+
+## (ii)
+```{r}
+stem(data$random_digit)
+```
+
+## (iii)
+```{r}
+rand<-c(0:9)
+tot <- sample(rand, length(data$random_digit), replace = TRUE)
+stem(tot)
+```
+### Student_digit looks more like it might have come from Uniform on the digits
+
+
+## b)
+
+## (i)
+
+```{r}
+my_digits<-c(0,1,3,4,7,1,4,9,7,4)
+count_digits<-function(d){
+  fl<-c()
+  n<-length(d)
+  for(i in 1:10)
+    {
+    nv<-0
+    for(j in 1:n)
+      {
+      if(d[j]==i-1)
+        {
+        nv<-nv+1}  
+      }
+    fl[i]<-nv
+  }
+  fl
+}
+count_digits(my_digits)
+```
+
+## (ii)
+```{r}
+count_digits(data$student_digit)
+count_digits(data$random_digit)
+```
+
+## (iii)
+```{r}
+Pearson_chi_sq <- function(observed,expected){
+  expected <- sum(observed)/length(observed)
+  vect<-c()
+  dum<-c()
+  n<-length(observed)
+  dum<-0
+  for(i in 1:n){
+    vect[i]<-expected
+  }
+  for(i in 1:n){
+    dum <- dum+((observed[i]-expected)^2)/expected
+  }
+ return(dum)
+}
+Pearson_chi_sq(count_digits(data$student_digit))
+```
+
+## (iv)
+```{r}
+## function for student digit
+Pearson_chi_sq(count_digits(data$student_digit))
+chisq.test(count_digits(data$student_digit))$statistic
+
+## function for random digit
+Pearson_chi_sq(count_digits(data$random_digit))
+chisq.test(count_digits(data$random_digit))$statistic
+```
+### Values from Pearson_chi_sq and chisq.test match
+
+
+## (v)
+```{r}
+pchisq(Pearson_chi_sq(count_digits(data$student_digit)), 9, lower=FALSE)
+chisq.test(count_digits(data$student_digit))$p.value
+pchisq(Pearson_chi_sq(count_digits(data$random_digit)), 9, lower=FALSE)
+chisq.test(count_digits(data$random_digit))$p.value
+```
+### The values from pchisq using pearsonchisq matches with chisq.test
+
+
+## (vi)
+```{r}
+get_chisqs<-function(n, B=1000){
+  rand <- c(0:9)
+  vect <- c()
+  nv <- c()
+  for(i in 1:B){
+   tot <- sample(rand ,n, replace=TRUE)
+   cs <-count_digits(tot)
+   nv[[i]]<-cs
+  }
+  val <- sapply(nv,Pearson_chi_sq) 
+   print(val)
+}
+n<-nrow(data)
+results<-get_chisqs(n=n,B=1000)
+```
+
+## (vii)
+```{r eval=TRUE}
+n <- nrow(data)
+B <- 10000
+set.seed(314159)
+
+chisq_stats<-get_chisqs(n=n, B=B)
+hist(chisq_stats, col="lightgrey", main="Simulated Pearson test null distribution", xlab="test stat")
+abline( v=Pearson_chi_sq( count_digits( data$student_digit)), lwd=3, lty=2, col="red")
+abline( v=Pearson_chi_sq( count_digits( data$random_digit)), lwd=3, lty=2, col="blue")
+```
+### Radom digits seem less likely to have been generated as a random sample from a uniform distribution of digits. The main reason behind this is that it has a lower val as we can infer it from the hist. 
+
+## (viii)
+```{r}
+mean(chisq_stats >= Pearson_chi_sq( count_digits( data$student_digit)))
+mean(chisq_stats >= Pearson_chi_sq( count_digits( data$random_digit)))
+```
+
+## (ix)
+### Since the p value is large for student digit and small for random digit, we can say that the hypothesis is true for student digit anf false for random digit.
+
