@@ -116,7 +116,6 @@ par(dat)
 
 
 ## d(v)
-## Draw a (nicely labelled) qqplot() comparing the above two sets of observations. What do you conclude about their empirical distributions? Why?
 ```{r}
 qqplot(mtcars$qsec, samobs_fromqsec, main = "Q-Q Plot",xlab = "Theoretical Observations", ylab = "Sample Observations")
 
@@ -125,9 +124,12 @@ qqplot(mtcars$qsec, samobs_fromqsec, main = "Q-Q Plot",xlab = "Theoretical Obser
 ## Generally QQ plots a scatterplot using two quantiles against each other.From the graph we can infer that the points form a line that's roughly straight. This states that both the quantiles come from the same distribution. 
 
 ## d(vi)
+## Step 1 - Inorder to produce a bootstrap distribution for some estimator theta, Let us use quantile to produce some data. I am using cylinders from mtcars dataset. I used the quantile fucntion with number of bootstrap samples drawn as 100 with a two sided confidence interval(95%) argument. 
 ```{r}
 
-```
+quantile(mtcars$cyl, probs = runif(50), CI.type = "two.sided", nbboot=100)
 
+```
+## I would recommend using quantiles over bootsrtap. The main reason behind is that quantile function is computationally less expensive when compared to bootstrapping. 
 
 
