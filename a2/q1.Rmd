@@ -1,0 +1,47 @@
+---
+title: "Assignment 2 - Ram Yoogesh (20867060)"
+output: html_notebook
+---
+
+## Question 1 
+
+
+## (c)
+```{r warning=FALSE}
+
+help("runif")
+
+
+
+```
+
+## (c) (i)
+### Writing the r_unifgenFX function to return random derivates 
+```{r}
+r_unifgenFX <- function(n, qfunction = qnorm)
+{
+  randomderivates <- runif(n, min =0, max = 1)
+  return (randomderivates)
+}
+```
+
+## (c) (ii)
+### Executing the following snippets as instructued 
+```{r}
+set.seed(1234567)
+
+oldpar <- par(mfrow = c(1, 2))
+hist(r_unifgenFX(1000))
+
+hist(r_unifgenFX(1000, qfunction = ruinf))
+```
+## (c)(iii)
+### Generating pseudo-random observations from a student t distribution 
+```{r}
+
+curve(dt(x, 3), from =-10, to= 10, col ='red', add = TRUE, lwd = 2, xlab="quantile", ylab ="density")
+
+```
+
+
+
