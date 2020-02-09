@@ -60,6 +60,29 @@ hist(qt(sam_obs, df = 3))
 
 ## (d)
 ```{r}
+# Just analyzing the dataset before interpreting the questions ! 
+
+str(mtcars)
+# we can infer that it has 11 variables and 32 rows . Names of these are mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, card
+head(mtcars)
 
 ```
+
+
+## (d)(i)
+## In order to answer this question ,lets use the summary function to get some insights. We can infer from summary of qsec ( min value- 14.50, 1st quartile - 16.89 and so on). 
+```{r}
+summary(mtcars)
+```
+```{r}
+# Now lets use the Quantile function to answer the question 
+quantile(mtcars$qsec)
+```
+## Qsec - The variable denotes the 1/4 mile time took by cars.
+## Qunatile function basically prodcues the values at the respective quartiles. Say 0, 25, 50, 75 and 100. What it means for Qsec is that at 25th pecent quartile the value of qsec is 16.89 (It tooks a car 16.89s to reach 1/4 mile). At 50th percent, also called as the median of the dataset, the value at 50th percent quartile is 17.71s, likewise for the remaining quartiles.
+
+
+## d(ii)
+
+
 

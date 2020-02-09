@@ -1856,12 +1856,100 @@ r_unifgen &lt;- function (n, dof)
 <h2>(d)</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBKdXN0IGFuYWx5emluZyB0aGUgZGF0YXNldCBiZWZvcmUgaW50ZXJwcmV0aW5nIHRoZSBxdWVzdGlvbnMgISBcblxuc3RyKG10Y2FycylcbmBgYCJ9 -->
+<pre class="r"><code># Just analyzing the dataset before interpreting the questions ! 
+
+str(mtcars)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJ2RhdGEuZnJhbWUnOlx0MzIgb2JzLiBvZiAgMTEgdmFyaWFibGVzOlxuICQgbXBnIDogbnVtICAyMSAyMSAyMi44IDIxLjQgMTguNyAxOC4xIDE0LjMgMjQuNCAyMi44IDE5LjIgLi4uXG4gJCBjeWwgOiBudW0gIDYgNiA0IDYgOCA2IDggNCA0IDYgLi4uXG4gJCBkaXNwOiBudW0gIDE2MCAxNjAgMTA4IDI1OCAzNjAgLi4uXG4gJCBocCAgOiBudW0gIDExMCAxMTAgOTMgMTEwIDE3NSAxMDUgMjQ1IDYyIDk1IDEyMyAuLi5cbiAkIGRyYXQ6IG51bSAgMy45IDMuOSAzLjg1IDMuMDggMy4xNSAyLjc2IDMuMjEgMy42OSAzLjkyIDMuOTIgLi4uXG4gJCB3dCAgOiBudW0gIDIuNjIgMi44OCAyLjMyIDMuMjEgMy40NCAuLi5cbiAkIHFzZWM6IG51bSAgMTYuNSAxNyAxOC42IDE5LjQgMTcgLi4uXG4gJCB2cyAgOiBudW0gIDAgMCAxIDEgMCAxIDAgMSAxIDEgLi4uXG4gJCBhbSAgOiBudW0gIDEgMSAxIDAgMCAwIDAgMCAwIDAgLi4uXG4gJCBnZWFyOiBudW0gIDQgNCA0IDMgMyAzIDMgNCA0IDQgLi4uXG4gJCBjYXJiOiBudW0gIDQgNCAxIDEgMiAxIDQgMiAyIDQgLi4uXG4ifQ== -->
+<pre><code>'data.frame':   32 obs. of  11 variables:
+ $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+ $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+ $ disp: num  160 160 108 258 360 ...
+ $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+ $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+ $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+ $ qsec: num  16.5 17 18.6 19.4 17 ...
+ $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+ $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+ $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+ $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3ZSBjYW4gaW5mZXIgdGhhdCBpdCBoYXMgMTEgdmFyaWFibGVzIGFuZCAzMiByb3dzIC4gTmFtZXMgb2YgdGhlc2UgYXJlIG1wZywgY3lsLCBkaXNwLCBocCwgZHJhdCwgd3QsIHFzZWMsIHZzLCBhbSwgZ2VhciwgY2FyZFxuaGVhZChtdGNhcnMpXG5gYGAifQ== -->
+<pre class="r"><code># we can infer that it has 11 variables and 32 rows . Names of these are mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, card
+head(mtcars)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MTEsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFBM1ZUUFhEVE1CUldITnRwN0d2YUhoMWc0VHl5Sk5jbUtlM0NvU0VITEF5VW4rWm9GOFYyVXgrT3JNcDJDcDFZbUpuaDJHRHV3dEtaR1daV21GbFk2TmdpVzNxK1dwUjNwM3pmKy9RKzZUMGwyUjZOQjg3WVFRZzFVZE51b0tZbEtMS2VQcm5YM1VMSU5FVFNRQ1pxRi9oU0ZGMFR4QldySTVhTk4xQVpGZDcrV3NRM3ZMRmZCdTUvSGhTQit6ZmVpWGhmK2E2cmVzQmxMZmZxZWVVTGxBNjRxNUJKQTU2L2xoaDdkZCt1MGdGM2NEMFBmMGg4anV1K3BZSHNIN0NqNWx2NCtOMjV3ejdodHRMdDFlT2Y5MDlXSzUvNTU4dmJ2VnRudUtYNk0wUW1KTncrZmZUcnpjMVQ3SW9Qd2JCN1Vob3IzMW91ZmV1VzNPOS9LR3g3ZU1DS0N3OHJmYmhWbmdNK3BNWGQzM1hVZGZEcGRYcjlGU0g3WEZaejZiaHdOZjdQcDkrTC8rbXo5Z08wS0ptRnFTQ0YzVlZpYzhhbVFQMVhzYUptRUtWTWNlT0FWU29uR2FoSHdNekROUFJCbmFmQXlBejJweUhod0gzQ0oxcGJiWjRjOVM2M1pzUEdRM0ljRUc5N1BGVENZaVY0T3dTNmRrWWtTM1BxYmE2dkthWHpJT0Uwekx5aE4rTFJQRlRxaWxJZnM0Um5aSkxrMEgvckdZa2pRalA5dGZ5WXBOQVNpRTVBTXRMYjU2SmJrWjFybGxiQ3NpaWh3bVFVLzNOTE16ZTRKaXpsdEpnNzZQb0hPWDNSN1JjWGxOdHlMU3EwTDNGWFhtbGNxS01zZFpRZDBtbEVZVllySnBNUXZzdU9lTi95ZVh1TVJ4U21kb1NhOXJJa0kxRG4rRWtNU2prYk92OExWVVRhSWQ0RUFBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["mpg"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["cyl"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["disp"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["drat"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["wt"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["qsec"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["vs"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["am"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["gear"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["carb"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"21.0","2":"6","3":"160","4":"110","5":"3.90","6":"2.620","7":"16.46","8":"0","9":"1","10":"4","11":"4","_rn_":"Mazda RX4"},{"1":"21.0","2":"6","3":"160","4":"110","5":"3.90","6":"2.875","7":"17.02","8":"0","9":"1","10":"4","11":"4","_rn_":"Mazda RX4 Wag"},{"1":"22.8","2":"4","3":"108","4":"93","5":"3.85","6":"2.320","7":"18.61","8":"1","9":"1","10":"4","11":"1","_rn_":"Datsun 710"},{"1":"21.4","2":"6","3":"258","4":"110","5":"3.08","6":"3.215","7":"19.44","8":"1","9":"0","10":"3","11":"1","_rn_":"Hornet 4 Drive"},{"1":"18.7","2":"8","3":"360","4":"175","5":"3.15","6":"3.440","7":"17.02","8":"0","9":"0","10":"3","11":"2","_rn_":"Hornet Sportabout"},{"1":"18.1","2":"6","3":"225","4":"105","5":"2.76","6":"3.460","7":"20.22","8":"1","9":"0","10":"3","11":"1","_rn_":"Valiant"}],"options":{"columns":{"min":{},"max":[10],"total":[11]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
+<pre class="r"><code>NA</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="di" class="section level2">
+<h2>(d)(i)</h2>
+</div>
+<div id="in-order-to-answer-this-question-lets-use-the-summary-function-to-get-some-insights.-we-can-infer-from-summary-of-qsec-min-value--14.50-1st-quartile---16.89-and-so-on." class="section level2">
+<h2>In order to answer this question ,lets use the summary function to get some insights. We can infer from summary of qsec ( min value- 14.50, 1st quartile - 16.89 and so on).</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtdGNhcnMpXG5gYGAifQ== -->
+<pre class="r"><code>summary(mtcars)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgbXBnICAgICAgICAgICAgIGN5bCAgICAgICAgICAgICBkaXNwICAgICAgICAgICAgIGhwICAgICAgIFxuIE1pbi4gICA6MTAuNDAgICBNaW4uICAgOjQuMDAwICAgTWluLiAgIDogNzEuMSAgIE1pbi4gICA6IDUyLjAgIFxuIDFzdCBRdS46MTUuNDMgICAxc3QgUXUuOjQuMDAwICAgMXN0IFF1LjoxMjAuOCAgIDFzdCBRdS46IDk2LjUgIFxuIE1lZGlhbiA6MTkuMjAgICBNZWRpYW4gOjYuMDAwICAgTWVkaWFuIDoxOTYuMyAgIE1lZGlhbiA6MTIzLjAgIFxuIE1lYW4gICA6MjAuMDkgICBNZWFuICAgOjYuMTg4ICAgTWVhbiAgIDoyMzAuNyAgIE1lYW4gICA6MTQ2LjcgIFxuIDNyZCBRdS46MjIuODAgICAzcmQgUXUuOjguMDAwICAgM3JkIFF1LjozMjYuMCAgIDNyZCBRdS46MTgwLjAgIFxuIE1heC4gICA6MzMuOTAgICBNYXguICAgOjguMDAwICAgTWF4LiAgIDo0NzIuMCAgIE1heC4gICA6MzM1LjAgIFxuICAgICAgZHJhdCAgICAgICAgICAgICB3dCAgICAgICAgICAgICBxc2VjICAgICAgICAgICAgIHZzICAgICAgICBcbiBNaW4uICAgOjIuNzYwICAgTWluLiAgIDoxLjUxMyAgIE1pbi4gICA6MTQuNTAgICBNaW4uICAgOjAuMDAwMCAgXG4gMXN0IFF1LjozLjA4MCAgIDFzdCBRdS46Mi41ODEgICAxc3QgUXUuOjE2Ljg5ICAgMXN0IFF1LjowLjAwMDAgIFxuIE1lZGlhbiA6My42OTUgICBNZWRpYW4gOjMuMzI1ICAgTWVkaWFuIDoxNy43MSAgIE1lZGlhbiA6MC4wMDAwICBcbiBNZWFuICAgOjMuNTk3ICAgTWVhbiAgIDozLjIxNyAgIE1lYW4gICA6MTcuODUgICBNZWFuICAgOjAuNDM3NSAgXG4gM3JkIFF1LjozLjkyMCAgIDNyZCBRdS46My42MTAgICAzcmQgUXUuOjE4LjkwICAgM3JkIFF1LjoxLjAwMDAgIFxuIE1heC4gICA6NC45MzAgICBNYXguICAgOjUuNDI0ICAgTWF4LiAgIDoyMi45MCAgIE1heC4gICA6MS4wMDAwICBcbiAgICAgICBhbSAgICAgICAgICAgICAgZ2VhciAgICAgICAgICAgIGNhcmIgICAgICBcbiBNaW4uICAgOjAuMDAwMCAgIE1pbi4gICA6My4wMDAgICBNaW4uICAgOjEuMDAwICBcbiAxc3QgUXUuOjAuMDAwMCAgIDFzdCBRdS46My4wMDAgICAxc3QgUXUuOjIuMDAwICBcbiBNZWRpYW4gOjAuMDAwMCAgIE1lZGlhbiA6NC4wMDAgICBNZWRpYW4gOjIuMDAwICBcbiBNZWFuICAgOjAuNDA2MiAgIE1lYW4gICA6My42ODggICBNZWFuICAgOjIuODEyICBcbiAzcmQgUXUuOjEuMDAwMCAgIDNyZCBRdS46NC4wMDAgICAzcmQgUXUuOjQuMDAwICBcbiBNYXguICAgOjEuMDAwMCAgIE1heC4gICA6NS4wMDAgICBNYXguICAgOjguMDAwICBcbiJ9 -->
+<pre><code>      mpg             cyl             disp             hp       
+ Min.   :10.40   Min.   :4.000   Min.   : 71.1   Min.   : 52.0  
+ 1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8   1st Qu.: 96.5  
+ Median :19.20   Median :6.000   Median :196.3   Median :123.0  
+ Mean   :20.09   Mean   :6.188   Mean   :230.7   Mean   :146.7  
+ 3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0   3rd Qu.:180.0  
+ Max.   :33.90   Max.   :8.000   Max.   :472.0   Max.   :335.0  
+      drat             wt             qsec             vs        
+ Min.   :2.760   Min.   :1.513   Min.   :14.50   Min.   :0.0000  
+ 1st Qu.:3.080   1st Qu.:2.581   1st Qu.:16.89   1st Qu.:0.0000  
+ Median :3.695   Median :3.325   Median :17.71   Median :0.0000  
+ Mean   :3.597   Mean   :3.217   Mean   :17.85   Mean   :0.4375  
+ 3rd Qu.:3.920   3rd Qu.:3.610   3rd Qu.:18.90   3rd Qu.:1.0000  
+ Max.   :4.930   Max.   :5.424   Max.   :22.90   Max.   :1.0000  
+       am              gear            carb      
+ Min.   :0.0000   Min.   :3.000   Min.   :1.000  
+ 1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:2.000  
+ Median :0.0000   Median :4.000   Median :2.000  
+ Mean   :0.4062   Mean   :3.688   Mean   :2.812  
+ 3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
+ Max.   :1.0000   Max.   :5.000   Max.   :8.000  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOb3cgbGV0cyB1c2UgdGhlIFF1YW50aWxlIGZ1bmN0aW9uIHRvIGFuc3dlciB0aGUgcXVlc3Rpb24gXG5xdWFudGlsZShtdGNhcnMkcXNlYylcbmBgYCJ9 -->
+<pre class="r"><code># Now lets use the Quantile function to answer the question 
+quantile(mtcars$qsec)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAwJSAgICAgMjUlICAgICA1MCUgICAgIDc1JSAgICAxMDAlIFxuMTQuNTAwMCAxNi44OTI1IDE3LjcxMDAgMTguOTAwMCAyMi45MDAwIFxuIn0= -->
+<pre><code>     0%     25%     50%     75%    100% 
+14.5000 16.8925 17.7100 18.9000 22.9000 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="qsec---the-variable-denotes-the-14-mile-time-took-by-cars." class="section level2">
+<h2>Qsec - The variable denotes the 1/4 mile time took by cars.</h2>
+</div>
+<div id="qunatile-function-basically-prodcues-the-values-at-the-respective-quartiles.-say-0-25-50-75-and-100.-what-it-means-for-qsec-is-that-at-25th-pecent-quartile-the-value-of-qsec-is-16.89-it-tooks-a-car-16.89s-to-reach-14-mile.-at-50th-percent-also-called-as-the-median-of-the-dataset-the-value-at-50th-percent-quartile-is-17.71s-likewise-for-the-remaining-quartiles." class="section level2">
+<h2>Qunatile function basically prodcues the values at the respective quartiles. Say 0, 25, 50, 75 and 100. What it means for Qsec is that at 25th pecent quartile the value of qsec is 16.89 (It tooks a car 16.89s to reach 1/4 mile). At 50th percent, also called as the median of the dataset, the value at 50th percent quartile is 17.71s, likewise for the remaining quartiles.</h2>
+</div>
+<div id="dii" class="section level2">
+<h2>d(ii)</h2>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQXNzaWdubWVudCAyIC0gUmFtIFlvb2dlc2ggKDIwODY3MDYwKSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgUXVlc3Rpb24gMSAKCgojIyAoYykKYGBge3Igd2FybmluZz1GQUxTRX0KCmhlbHAoInJ1bmlmIikKCgoKYGBgCgojIyAoYykgKGkpCiMjIyBXcml0aW5nIHRoZSByX3VuaWZnZW5GWCBmdW5jdGlvbiB0byByZXR1cm4gcmFuZG9tIGRlcml2YXRlcyAKYGBge3J9CnJfdW5pZmdlbkZYIDwtIGZ1bmN0aW9uKG4sIHFmdW5jdGlvbiA9IHFub3JtKQp7CiAgcmFuZG9tZGVyaXZhdGVzIDwtIHJ1bmlmKG4sIG1pbiA9MCwgbWF4ID0gMSkKICByZXR1cm4gKHJhbmRvbWRlcml2YXRlcykKfQpgYGAKCiMjIChjKSAoaWkpCiMjIyBFeGVjdXRpbmcgdGhlIGZvbGxvd2luZyBzbmlwcGV0cyBhcyBpbnN0cnVjdHVlZCAKYGBge3J9CnNldC5zZWVkKDEyMzQ1NjcpCgpvbGRwYXIgPC0gcGFyKG1mcm93ID0gYygxLCAyKSkKaGlzdChyX3VuaWZnZW5GWCgxMDAwKSkKCmhpc3Qocl91bmlmZ2VuRlgoMTAwMCwgcWZ1bmN0aW9uID0gcnVpbmYpKQpwYXIob2xkcGFyKQpgYGAKIyMgKGMpKGlpaSkKIyMjIEdlbmVyYXRpbmcgcHNldWRvLXJhbmRvbSBvYnNlcnZhdGlvbnMgZnJvbSBhIHN0dWRlbnQgdCBkaXN0cmlidXRpb24gCmBgYHtyfQoKcl91bmlmZ2VuIDwtIGZ1bmN0aW9uIChuLCBkb2YpCnsKICByb2JzX3N0dWRlbnRfdCA8LSBydChuLCBkZj1kb2YpCiAgcmV0dXJuIChyb2JzX3N0dWRlbnRfdCkKfQpgYGAKCmBgYHtyfQpzYW1fb2JzIDwtIHJfdW5pZmdlbigxMDAwLCAzKQoKIyBOb3cgcGFzc2luZyB0aGUgdmVjdG9yIG9mIHJhbmRvbSB2YWx1ZXMgdG8gdGhlIHF0IGZ1Y250aW9uIHRvIGZpbmQgdGhlIHF1YW50aWxlIHZhbHVlcy4gCgogeF92YWwgPC0gcXQoc2FtX29icywgZGY9IDMsIGxvd2VyLnRhaWwgPSBUUlVFKQoKaGlzdChxdChzYW1fb2JzLCBkZiA9IDMpKQogCmBgYCAKCiMjIChkKQpgYGB7cn0KCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQXNzaWdubWVudCAyIC0gUmFtIFlvb2dlc2ggKDIwODY3MDYwKSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgUXVlc3Rpb24gMSAKCgojIyAoYykKYGBge3Igd2FybmluZz1GQUxTRX0KCmhlbHAoInJ1bmlmIikKCgoKYGBgCgojIyAoYykgKGkpCiMjIyBXcml0aW5nIHRoZSByX3VuaWZnZW5GWCBmdW5jdGlvbiB0byByZXR1cm4gcmFuZG9tIGRlcml2YXRlcyAKYGBge3J9CnJfdW5pZmdlbkZYIDwtIGZ1bmN0aW9uKG4sIHFmdW5jdGlvbiA9IHFub3JtKQp7CiAgcmFuZG9tZGVyaXZhdGVzIDwtIHJ1bmlmKG4sIG1pbiA9MCwgbWF4ID0gMSkKICByZXR1cm4gKHJhbmRvbWRlcml2YXRlcykKfQpgYGAKCiMjIChjKSAoaWkpCiMjIyBFeGVjdXRpbmcgdGhlIGZvbGxvd2luZyBzbmlwcGV0cyBhcyBpbnN0cnVjdHVlZCAKYGBge3J9CnNldC5zZWVkKDEyMzQ1NjcpCgpvbGRwYXIgPC0gcGFyKG1mcm93ID0gYygxLCAyKSkKaGlzdChyX3VuaWZnZW5GWCgxMDAwKSkKCmhpc3Qocl91bmlmZ2VuRlgoMTAwMCwgcWZ1bmN0aW9uID0gcnVpbmYpKQpwYXIob2xkcGFyKQpgYGAKIyMgKGMpKGlpaSkKIyMjIEdlbmVyYXRpbmcgcHNldWRvLXJhbmRvbSBvYnNlcnZhdGlvbnMgZnJvbSBhIHN0dWRlbnQgdCBkaXN0cmlidXRpb24gCmBgYHtyfQoKcl91bmlmZ2VuIDwtIGZ1bmN0aW9uIChuLCBkb2YpCnsKICByb2JzX3N0dWRlbnRfdCA8LSBydChuLCBkZj1kb2YpCiAgcmV0dXJuIChyb2JzX3N0dWRlbnRfdCkKfQpgYGAKCmBgYHtyfQpzYW1fb2JzIDwtIHJfdW5pZmdlbigxMDAwLCAzKQoKIyBOb3cgcGFzc2luZyB0aGUgdmVjdG9yIG9mIHJhbmRvbSB2YWx1ZXMgdG8gdGhlIHF0IGZ1Y250aW9uIHRvIGZpbmQgdGhlIHF1YW50aWxlIHZhbHVlcy4gCgogeF92YWwgPC0gcXQoc2FtX29icywgZGY9IDMsIGxvd2VyLnRhaWwgPSBUUlVFKQoKaGlzdChxdChzYW1fb2JzLCBkZiA9IDMpKQogCmBgYCAKCiMjIChkKQpgYGB7cn0KIyBKdXN0IGFuYWx5emluZyB0aGUgZGF0YXNldCBiZWZvcmUgaW50ZXJwcmV0aW5nIHRoZSBxdWVzdGlvbnMgISAKCnN0cihtdGNhcnMpCiMgd2UgY2FuIGluZmVyIHRoYXQgaXQgaGFzIDExIHZhcmlhYmxlcyBhbmQgMzIgcm93cyAuIE5hbWVzIG9mIHRoZXNlIGFyZSBtcGcsIGN5bCwgZGlzcCwgaHAsIGRyYXQsIHd0LCBxc2VjLCB2cywgYW0sIGdlYXIsIGNhcmQKaGVhZChtdGNhcnMpCgpgYGAKCgojIyAoZCkoaSkKIyMgSW4gb3JkZXIgdG8gYW5zd2VyIHRoaXMgcXVlc3Rpb24gLGxldHMgdXNlIHRoZSBzdW1tYXJ5IGZ1bmN0aW9uIHRvIGdldCBzb21lIGluc2lnaHRzLiBXZSBjYW4gaW5mZXIgZnJvbSBzdW1tYXJ5IG9mIHFzZWMgKCBtaW4gdmFsdWUtIDE0LjUwLCAxc3QgcXVhcnRpbGUgLSAxNi44OSBhbmQgc28gb24pLiAKYGBge3J9CnN1bW1hcnkobXRjYXJzKQpgYGAKYGBge3J9CiMgTm93IGxldHMgdXNlIHRoZSBRdWFudGlsZSBmdW5jdGlvbiB0byBhbnN3ZXIgdGhlIHF1ZXN0aW9uIApxdWFudGlsZShtdGNhcnMkcXNlYykKYGBgCiMjIFFzZWMgLSBUaGUgdmFyaWFibGUgZGVub3RlcyB0aGUgMS80IG1pbGUgdGltZSB0b29rIGJ5IGNhcnMuCiMjIFF1bmF0aWxlIGZ1bmN0aW9uIGJhc2ljYWxseSBwcm9kY3VlcyB0aGUgdmFsdWVzIGF0IHRoZSByZXNwZWN0aXZlIHF1YXJ0aWxlcy4gU2F5IDAsIDI1LCA1MCwgNzUgYW5kIDEwMC4gV2hhdCBpdCBtZWFucyBmb3IgUXNlYyBpcyB0aGF0IGF0IDI1dGggcGVjZW50IHF1YXJ0aWxlIHRoZSB2YWx1ZSBvZiBxc2VjIGlzIDE2Ljg5IChJdCB0b29rcyBhIGNhciAxNi44OXMgdG8gcmVhY2ggMS80IG1pbGUpLiBBdCA1MHRoIHBlcmNlbnQsIGFsc28gY2FsbGVkIGFzIHRoZSBtZWRpYW4gb2YgdGhlIGRhdGFzZXQsIHRoZSB2YWx1ZSBhdCA1MHRoIHBlcmNlbnQgcXVhcnRpbGUgaXMgMTcuNzFzLCBsaWtld2lzZSBmb3IgdGhlIHJlbWFpbmluZyBxdWFydGlsZXMuCgoKIyMgZChpaSkKCgoK</div>
 
 
 
