@@ -34,14 +34,32 @@ oldpar <- par(mfrow = c(1, 2))
 hist(r_unifgenFX(1000))
 
 hist(r_unifgenFX(1000, qfunction = ruinf))
+par(oldpar)
 ```
 ## (c)(iii)
 ### Generating pseudo-random observations from a student t distribution 
 ```{r}
 
-curve(dt(x, 3), from =-10, to= 10, col ='red', add = TRUE, lwd = 2, xlab="quantile", ylab ="density")
-
+r_unifgen <- function (n, dof)
+{
+  robs_student_t <- rt(n, df=dof)
+  return (robs_student_t)
+}
 ```
 
+```{r}
+sam_obs <- r_unifgen(1000, 3)
 
+# Now passing the vector of random values to the qt fucntion to find the quantile values. 
+
+ x_val <- qt(sam_obs, df= 3, lower.tail = TRUE)
+
+hist(qt(sam_obs, df = 3))
+ 
+``` 
+
+## (d)
+```{r}
+
+```
 
