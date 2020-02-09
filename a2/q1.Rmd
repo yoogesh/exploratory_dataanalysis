@@ -8,10 +8,7 @@ output: html_notebook
 
 ## (c)
 ```{r warning=FALSE}
-
 help("runif")
-
-
 
 ```
 
@@ -83,6 +80,14 @@ quantile(mtcars$qsec)
 
 
 ## d(ii)
+## we can pass mtcars$qsec in the X argument and for the probability we can use runif to generate 1000 observations
+```{r}
+quantile(mtcars$qsec, prob = runif(1000))
+```
 
 
+## (d)(iii)
+```{r}
+
+```
 
