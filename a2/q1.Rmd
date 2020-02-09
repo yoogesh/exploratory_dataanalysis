@@ -5,13 +5,6 @@ output: html_notebook
 
 ## Question 1 
 
-
-## (c)
-```{r warning=FALSE}
-help("runif")
-
-```
-
 ## (c) (i)
 ### Writing the r_unifgenFX function to return random derivates 
 ```{r}
@@ -117,11 +110,24 @@ hist(mtcars$qsec, main = "Qsec from Mtcars", xlab = "Qsec - (1/4 mile Time)", co
 hist(samobs_fromqsec, main = "Qsec Generated from Quantile", xlab = "Qsec - (1/4 Time) - Generated", col='skyblue')
 par(dat)
 
-x <- 0 
 ```
 
 ## From the histograms we can infer that both the graphs follow the same distribution. Although in the left (Original Qsec data from mtcars) we can see that there is no bin at 21-22 seconds - That is, there was no car that took 21-22 seconds to attain 1/4 a mile. On the contrary on the right (Qsec generated using the quantile function) we can see that there is a bin at 21-22 since the data was geneated with prob 0 and 1. On the Y-Axis (Left side Graph) we can see that the frequency goes from 0 to 10 with a step size of 2. Whereas on the Y-axis (Right side graph) we can see that the frequency goes from 0 to 250 with a step size of 50.
 
+
+## d(v)
+## Draw a (nicely labelled) qqplot() comparing the above two sets of observations. What do you conclude about their empirical distributions? Why?
+```{r}
+qqplot(mtcars$qsec, samobs_fromqsec, main = "Q-Q Plot",xlab = "Theoretical Observations", ylab = "Sample Observations")
+
+```
+
+## Generally QQ plots a scatterplot using two quantiles against each other.From the graph we can infer that the points form a line that's roughly straight. This states that both the quantiles come from the same distribution. 
+
+## d(vi)
+```{r}
+
+```
 
 
 
