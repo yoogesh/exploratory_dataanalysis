@@ -112,12 +112,12 @@ quantile(mtcars$cyl, prob=runif(10))
 
 ## d(iv)
 ```{r}
-library(ggplot2)
 dat <- par(mfrow = c(1,2))
 hist(mtcars$qsec, main = "Qsec from Mtcars", xlab = "Qsec - (1/4 mile Time)", col = 'red')
 hist(samobs_fromqsec, main = "Qsec Generated from Quantile", xlab = "Qsec - (1/4 Time) - Generated", col='skyblue')
 par(dat)
 
+x <- 0 
 ```
 
 ## From the histograms we can infer that both the graphs follow the same distribution. Although in the left (Original Qsec data from mtcars) we can see that there is no bin at 21-22 seconds - That is, there was no car that took 21-22 seconds to attain 1/4 a mile. On the contrary on the right (Qsec generated using the quantile function) we can see that there is a bin at 21-22 since the data was geneated with prob 0 and 1. On the Y-Axis (Left side Graph) we can see that the frequency goes from 0 to 10 with a step size of 2. Whereas on the Y-axis (Right side graph) we can see that the frequency goes from 0 to 250 with a step size of 50.
