@@ -6,8 +6,30 @@ output:
 
 
 ```{r}
-plot(cars)
+help("distributions")
+
 ```
 
 
+
+```{r}
+truncate <- function (ddist = dnorm, pdist = pnorm, qdist = qnorm, a = -inf, b = inf)
+{
+  
+}
+```
+
+```{r}
+
+half_normal <- truncate (a = 0)
+xsample <- half_normal$rdist(300)
+x <- seq(-3, 3, 0.01)
+fx <- half_normal$ddist(x)
+FX <- half_normal$pdist(x)
+oldpar <- par (mfrow = c(1,2))
+plot(x, fx, type = "1", main = "Half Normal Density")
+plot(x, FX, type = "1", main = "Half Normal Distribution")
+hist(xsample, main = "Half Normal Sample")
+par(oldpar)
+```
 
