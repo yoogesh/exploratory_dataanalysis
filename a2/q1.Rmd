@@ -4,13 +4,22 @@ output: html_notebook
 ---
 
 ## Question 1 
+## (A)
 
+### From the question we can consider that
+$$p = Pr(Y \le Q_Y(p))$$
+### Upon substituting the values of Y we get, 
+$$p = Pr(aX+b \le Q_Y(p))$$
 
-## (c)
-```{r warning=FALSE}
-help("runif")
+$$p = Pr(X \le\frac{ Q_Y(p) - b}{a})$$
+$F_X(x) = Pr(X \le x)$
+$$p = F_X(\frac{ Q_Y(p) - b}{a})$$
+### From the above 2 equations, we can write this as 
+$$F_X^{-1}(p) = F_X^{-1}(F_X(\frac{ Q_Y(p) - b}{a}))$$
 
-```
+$$Q_Y(p) = aQ_X(p) +b$$
+### Hence proved. 
+
 
 ## (c) (i)
 ### Writing the r_unifgenFX function to return random derivates 
@@ -122,6 +131,11 @@ par(dat)
 
 ## From the histograms we can infer that both the graphs follow the same distribution. Although in the left (Original Qsec data from mtcars) we can see that there is no bin at 21-22 seconds - That is, there was no car that took 21-22 seconds to attain 1/4 a mile. On the contrary on the right (Qsec generated using the quantile function) we can see that there is a bin at 21-22 since the data was geneated with prob 0 and 1. On the Y-Axis (Left side Graph) we can see that the frequency goes from 0 to 10 with a step size of 2. Whereas on the Y-axis (Right side graph) we can see that the frequency goes from 0 to 250 with a step size of 50.
 
+
+## d(v)
+```{r}
+qqplot(mtcars$qsec, samobs_fromqsec)
+```
 
 
 
