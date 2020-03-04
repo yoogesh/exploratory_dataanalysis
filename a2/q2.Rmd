@@ -1,0 +1,199 @@
+---
+title: "Assignment 2 - Ram Yoogesh (20867060)"
+output:
+  pdf_document: default
+---
+
+
+## (A)
+
+         
+$$G_W(y) = Pr(W \le y)$$
+
+$$H_W(y) = Pr(Q_X(F_X(a) + U \times (F_X(b) - F_X(a))) \le y)$$
+ 
+$$H_W(y) = Pr(F_X(Q_X(F_X(a) + U \times (F_X(b) - F_X(a)))) \le F_X(y))$$
+
+$$H_W(y) = Pr(F_X(a) + U \times (F_X(b) - F_X(a)) \le F_X(y))$$
+
+$$H_W(y) = Pr(U \le \frac{F_X(y) - F_X(a)}{F_X(b) - F_X(a)})$$
+
+
+$$H_W(y) = Pr(U \le \frac{F_X(y) - F_X(a)}{F_X(b) - F_X(a)})$$
+
+
+$$H_W(y) = Pr(U \le G_Y(y))$$
+
+### Hence, 
+
+$$H_W(y) = G_Y(y)$$
+
+
+
+
+## (B)
+
+```{r}
+truncate <- function (ddist = dnorm, pdist = pnorm, qdist = qnorm, a = -Inf, b = Inf)
+{
+
+  
+  # Writing the necessary code for Ddist 
+f1 <- function(value){
+  emptvector <- c()
+  
+  for(i in value)
+  {
+    if (i < a || i > b)
+    {
+      emptvector <- c(emptvector, 0)
+    }
+    else{
+      probfun_val <- ddist(i)
+      emptvector <- c(emptvector, probfun_val)
+    }
+  }
+  return(emptvector)
+}
+ 
+
+# Writing the necessary code for Pdist 
+f2 <- function(value)
+{
+  emptf2_vector <- c()
+  for(i in value)
+  {
+    if (i < a)
+    {
+      emptf2_vector <- c(emptf2_vector, 0)
+    }
+    else if (i > b) 
+      {
+      emptf2_vector <- c(emptf2_vector, 1)
+    }
+    else
+      {
+      probfun_val <- (pdist(i) - pdist(a))/(pdist(b) - pdist(a))
+      emptf2_vector <- c(emptf2_vector, probfun_val)
+      
+    }
+  }
+  return(emptf2_vector)
+  
+}
+
+# Writing the necessary code for Rdist 
+f3 <- function (value, mean = 0, sd = 1)
+{
+  uvalues = runif(value, mean, sd)
+  qv = pdist(a) + ( uvalues * (pdist(b) - pdist(a)))
+  rval = qdist(qv)
+  return(rval)
+}
+
+demo_list = list(ddist = f1, pdist = f2 ,  rdist = f3)
+return (demo_list)
+
+}
+
+
+```
+
+```{r}
+
+half_normal <- truncate(a = 0)
+xsample <- half_normal$rdist(300)
+x <- seq(-3, 3, 0.01)
+fx <- half_normal$ddist(x)
+Fx <- half_normal$pdist(x)
+oldPar <- par(mfrow = c(1,3))
+plot(x, fx, type = "l", main = "Half normal density")
+plot(x, Fx, type = "l", main = "Half normal distribution")
+hist(xsample, main = "Half normal sample")
+par(oldPar)
+```
+
+
+## (C)
+## (i)
+
+```{r}
+rand <- seq(-2,2,0.02)
+men <- dnorm(rand, mean = 0.09, sd = 0.49)
+women <- dnorm(rand, mean = -0.09, sd = 0.49)
+
+plot(rand, men, main = "P.D - Men & women", xlab = "Hmr", ylab = "Density", type = "l", col = "green")
+
+par(new = TRUE)
+plot(rand, women, type = "l", col = "red", xlab = "", ylab ="")
+legend("topright", c("M", "w"), fill = c("green", "red"))
+
+```
+
+## (ii)
+
+```{r}
+number <- 1000
+x <- rnorm(number, mean = -0.09, sd = 0.49)
+y <- rnorm(number, mean = 0.09, sd = 0.49)
+results <- data.frame(women = x, men = y)
+
+AvgM<- sum(results$men)/number
+AvgW <- sum(results$women)/number
+totsum <- sum(results$men > results$women)/number
+
+print("Average Humour for Men is")
+print(AvgM)
+
+print("Average Humour for Women is")
+print(AvgW)
+
+print("P(Men more funnier than Women)")
+print(totsum)
+```
+
+## (iii)
+```{r}
+
+number <- 1000
+tru_nor <- truncate(a = 1.07)
+y <- tru_nor$rdist(number, mean = 0.09, sd = 0.49)
+x <- tru_nor$rdist(number, mean = -0.09, sd = 0.49)
+funval <- data.frame(women = x, men = y)
+AvgM_Tru_Nor <- sum(funval$men)/number
+AvgW_Tru_Nor <- sum(funval$women)/number
+
+totsum <- sum(funval$men > funval$women)/number
+
+print("Average Humour for Men is")
+print(AvgM_Tru_Nor)
+print("Average Humour for Women is")
+print(AvgW_Tru_Nor)
+print("P(Men more funnier than Women)")
+print(totsum)
+
+```
+
+## (iv)
+## When the full population is taken into account, sample mean of humour for M and W is quite significant(More close). On the other hand when you consider the population limited to humour ability, we can say that the avg humour ability of M was more than W. Also, Probability of M being more funny than W by 65.9%
+
+## (v)
+```{r}
+number <- 1000
+tru_nor <- truncate(a = 1.07)
+y <- tru_nor$rdist(number, mean = 0.09, sd = 0.539)
+x <- tru_nor$rdist(number, mean = -0.09, sd = 0.49)
+funval <- data.frame(women = x, men = y)
+AvgM_Tru_Nor <- sum(funval$men)/number
+AvgW_Tru_Nor <- sum(funval$women)/number
+
+totsum <- sum(funval$men > funval$women)/number
+
+print("Average Humour for Men is")
+print(AvgM_Tru_Nor)
+print("Average Humour for Women is")
+print(AvgW_Tru_Nor)
+print("P(Men more funnier than Women)")
+print(totsum)
+```
+## It is evident that avg humour for men is higher than women. Hence we can say that with the same Mean and a higher S.D, the density curve will be more wider. 

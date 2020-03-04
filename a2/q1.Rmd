@@ -1,24 +1,45 @@
 ---
 title: "Assignment 2 - Ram Yoogesh (20867060)"
-output: html_notebook
+output:
+  pdf_document: default
 ---
 
 ## Question 1 
 ## (A)
-
 ### From the question we can consider that
 $$p = Pr(Y \le Q_Y(p))$$
-### Upon substituting the values of Y we get, 
+
+###  Upon substituting the values of Y we get, 
+
 $$p = Pr(aX+b \le Q_Y(p))$$
 
 $$p = Pr(X \le\frac{ Q_Y(p) - b}{a})$$
-$F_X(x) = Pr(X \le x)$
+
 $$p = F_X(\frac{ Q_Y(p) - b}{a})$$
+
 ### From the above 2 equations, we can write this as 
+
 $$F_X^{-1}(p) = F_X^{-1}(F_X(\frac{ Q_Y(p) - b}{a}))$$
 
 $$Q_Y(p) = aQ_X(p) +b$$
-### Hence proved. 
+
+###  Hence proved. 
+
+
+## (b)
+$$Pr(Q_X(U) \le x) = Pr(F_X^{-1}(U) \le x)$$
+$$Pr(Q_X(U) \le x) = Pr(F_X^{-1}(U) \le x)$$
+
+
+
+$$Pr(Q_X(U) \le x) = Pr(U \le F_X(x))$$
+$$Pr(Q_X(U) \le x) = G_U(F_X(x))$$
+
+
+$$Pr(Q_X(U) \le x) = F_X(x)$$
+
+
+
 
 
 ## (c) (i)
@@ -121,7 +142,6 @@ quantile(mtcars$cyl, prob=runif(10))
 
 ## d(iv)
 ```{r}
-library(ggplot2)
 dat <- par(mfrow = c(1,2))
 hist(mtcars$qsec, main = "Qsec from Mtcars", xlab = "Qsec - (1/4 mile Time)", col = 'red')
 hist(samobs_fromqsec, main = "Qsec Generated from Quantile", xlab = "Qsec - (1/4 Time) - Generated", col='skyblue')
@@ -135,7 +155,22 @@ par(dat)
 ## d(v)
 ```{r}
 qqplot(mtcars$qsec, samobs_fromqsec)
+
+
+qqplot(mtcars$qsec, samobs_fromqsec, main = "Q-Q Plot",xlab = "Theoretical Observations", ylab = "Sample Observations")
 ```
+
+
+## Generally QQ plots a scatterplot using two quantiles against each other.From the graph we can infer that the points form a line that's roughly straight. This states that both the quantiles come from the same distribution. 
+
+## d(vi)
+## Step 1 - Inorder to produce a bootstrap distribution for some estimator theta, Let us use quantile to produce some data. I am using cylinders from mtcars dataset. I used the quantile fucntion with number of bootstrap samples drawn as 100 with a two sided confidence interval(95%) argument. 
+```{r}
+
+quantile(mtcars$cyl, probs = runif(50), CI.type = "two.sided", nbboot=100)
+
+```
+## I would recommend using quantiles over bootsrtap. The main reason behind is that quantile function is computationally less expensive when compared to bootstrapping. 
 
 
 
