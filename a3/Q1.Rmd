@@ -1,0 +1,34 @@
+---
+title: "Ram Yoogesh Gopu A3 - 20867060"
+output: html_notebook
+---
+
+
+
+## Setting up 
+```{r}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 7, 
+                      fig.height = 6,
+                      out.height = "60%")
+set.seed(12314159)
+library(loon.data)
+library(loon)
+library(gridExtra)
+
+imageDirectory <- "./img"
+dataDirectory <- "./data"
+codeDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/"
+path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
+
+
+imageDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/img"  # e.g. in current "./img"
+dataDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/data"  # e.g. in current "./data"
+path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
+
+```
+
