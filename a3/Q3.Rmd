@@ -1,0 +1,157 @@
+---
+title: "Ram Yoogesh Gopu A3 - 20867060"
+output: pdf_notebook
+---
+
+## Setting up 
+```{r}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 7, 
+                      fig.height = 6,
+                      out.height = "60%")
+set.seed(12314159)
+library(loon.data)
+library(loon)
+library(gridExtra)
+
+imageDirectory <- "./img"
+dataDirectory <- "./data"
+codeDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/"
+path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
+
+
+imageDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/img"  # e.g. in current "./img"
+dataDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/data"  # e.g. in current "./data"
+path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
+
+```
+
+
+## (B)
+```{r}
+load("blocks.rda")
+head(blocks, n=3)
+students <- read.csv("judgmentSamples.csv")
+head(students, n = 3)
+```
+
+## (A)
+```{r}
+avgW <- mean(blocks$weight)
+totblock <- unlist(students[c(2:length(students))], recursive=FALSE)
+totW <- rep(0, length(totblock))
+
+j <- 1
+for(val in totblock) 
+{
+  totW[j] <- blocks$weight[blocks$id == val][1]
+  cat("\nid ", val, "Weight ", blocks$weight[blocks$id == val][1])
+  j <- j + 1
+}
+
+
+hist(totW,col = "blue",main = "Students Selected Weights",xlab = "Block Weights")
+abline(v = avg_weight, col="red")
+legend("topleft", c("Avg weight Block"), fill=c("red"))
+
+```
+
+## (B)
+```{r}
+ato_v <- c()
+for(i in 1:nrow(students)){
+  val = 0
+  for(j in 2:ncol(students)){
+    val = val + blocks[blocks$id==students[i,j],2]
+  }
+  ato_v <- c(ato_v,val/10) }
+
+students$avg_W <- l
+students$sampE <- mean(blocks$weight) - students$avg_W
+judgmentErr <- data.frame(students$studentID, students$sampE)
+judgmentErr$students.sampE <- abs(judgmentErr$students.sampE)
+judgmentErr<- judgmentErr[order(judgmentErr$students.sampE),]
+
+head(judgmentErr, n = 5)
+tail(judgmentErr, n = 5)
+```
+
+
+## (C)
+```{r}
+bias <- mean(students$sampE)
+print("Bias")
+bias
+std <- sd(students$sampE)
+print("Standard Deviation")
+std
+```
+
+## (D)
+
+```{r}
+hist(students$sampE, main = "Sample Err", xlab = "Sample Err", ylab = "Frequency", xlim = c(-15,15), ylim = c(0,14))
+abline(v = 0, lty = 2, col = "red", legend("topleft", c("Zero sample Err"), col = "red", lty = 2))
+
+```
+
+## (E)
+
+```{r}
+sd_v <- c()
+for(i in 1:nrow(students)){
+  li <- c()
+  for(j in 2:ncol(students)-2) {
+    li <- c(li, blocks[blocks$id==students[i,j],2])
+  }
+  sd_v <- c(sd_v, sd(li))}
+
+hist(sd_v, xlab = "Sample Standard Deviation", ylab = "Frequency", ylim = c(0, 13), main = "Standard Deviation of Sample Weights")
+abline(v = mean(sd_v), lty = 2, col = "red", legend("topleft", c("Avg Standard Deviation"), col = "red", lty = 2))
+```
+
+## (F)
+```{r}
+MinSD = which(sd_v == min(sd_v))
+MaxSD = which(sd_v == max(sd_v))
+
+minStudent_Sd<- students[MinSD,1]
+maxStudent_Sd <- students[MaxSD,1]
+min_sd_v <- min(sd_v)
+max_sd_v <- max(sd_v)
+
+cat("Student Id: ", min_sd_stud, " has small sample SD - ", min_sd_v)
+cat("\nStudent id: ", max_sd_stud, " has large sample SD -", max_sd_v)
+
+MinSD_weights <- c()
+MinSD_peri <- c()
+
+for(j in 2:ncol(students)-2){
+  MinSD_weights <- c(MinSD_weights,blocks[blocks$id==students[MinSD,j],2])
+  MinSD_peri <- c(MinSD_peri,blocks[blocks$id==students[MinSD,j],3])
+}
+
+MaxSD_weights <- c()
+MaxSD_peri <- c()
+
+for(j in 2:ncol(students)-2){
+  MaxSD_weights <- c(MaxSD_weights,blocks[blocks$id==students[MaxSD,j],2])
+  MaxSD_peri <- c(MaxSD_peri,blocks[blocks$id==students[MaxSD,j],3])
+}
+
+hist(MinSD_weights, xlim = extendrange(blocks$weight), main = "Student Min SD - 7656", xlab = "Weight", ylab = "Frequency")
+abline(v = mean(blocks$weight), col="red", lty=2)
+
+hist(MaxSD_weights, xlim = extendrange(blocks$weight), main = "Student Max SD - 7582", xlab = "Weight", ylab = "Frequency")
+abline(v = mean(blocks$weight), col="red", lty=2)
+
+MinSD_peri
+MaxSD_peri
+```
+## (G)
+
+

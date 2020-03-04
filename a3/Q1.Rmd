@@ -1,6 +1,6 @@
 ---
 title: "Ram Yoogesh Gopu A3 - 20867060"
-output: html_notebook
+output: pdf_notebook
 ---
 
 
@@ -29,6 +29,192 @@ path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
 imageDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/img"  # e.g. in current "./img"
 dataDirectory <- "/home/yoogesh/Desktop/stat847assignments/a3/data"  # e.g. in current "./data"
 path_concat <- function(path1, path2, sep="/") paste(path1, path2, sep = sep)
+
+```
+
+
+## (B)
+```{r}
+load("blocks.rda")
+head(blocks, n=3)
+```
+
+
+## (A)
+## (i)
+
+```{r}
+print("printing All Mean")
+
+print("Weight")
+mean(blocks$weight)
+print("Perimeter")
+mean(blocks$perimeter)
+
+print("Printing Median")
+
+print("Weights")
+median(blocks$weight)
+print("Perimeter")
+median(blocks$perimeter)
+
+
+print("printing Standard Deviation")
+
+print("Weights")
+sd(blocks$weight)
+print("Perimeter")
+sd(blocks$perimeter)
+```
+
+
+## (ii)
+
+```{r}
+library(dplyr)
+bone = slice(blocks, which(blocks$group == "A"))
+btwo = slice(blocks, which(blocks$group == "B"))
+
+print("Block One")
+
+print("Mean weight")
+mean(bone$weight)
+print("Mean perimeter")
+mean(bone$perimeter)
+
+print("Median weight")
+median(bone$weight)
+print("Median perimeter")
+median(bone$perimeter)
+
+print("Standard Deviation weight")
+sd(bone$weight)
+print("Standard Deviation perimete")
+sd(bone$perimeter)
+
+
+print("Block Two")
+
+print("Mean weightw")
+mean(btwo$weight)
+print("Mean perimeter")
+mean(btwo$perimeter)
+
+print("Median weight")
+median(btwo$weight)
+print("Median of Perimeter")
+median(btwo$perimeter)
+
+print("Standard Deviation Weight")
+sd(btwo$weight)
+print("Standard Deviation perimeter")
+sd(btwo$perimeter)
+```
+
+## (iii)
+
+## From the above results we can infer that all the mean, median and weights are almost double for the block Two. The standard deviation for Block 1 is very low. Standard deviation for block two is also, but the overall value of the standard deviation is very high. Also, the mean of the perimeter of block Two is almost close to the perimeter of the whole group. Hence we can conclude that Block Two has the largest blocks. 
+
+
+
+## (B)
+## (i)
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+hone <- ggplot(data=bone, aes(bone$weight)) + 
+                coord_cartesian(xlim = extendrange(blocks$weight), ylim = c(0,20)) + 
+                scale_y_continuous(breaks=seq) + 
+                geom_histogram() + 
+                geom_vline(xintercept=mean(bone$weight), linetype="dashed", 
+                color = "red", size=1) + 
+                ggtitle("Group One")
+
+
+htwo <-  ggplot(data=btwo, aes(btwo$weight)) + 
+                coord_cartesian(xlim = extendrange(blocks$weight), ylim = c(0,20)) + 
+                scale_y_continuous(breaks=seq) + 
+                geom_histogram() + 
+                geom_vline(xintercept=mean(btwo$weight), linetype="dashed", 
+                color = "red", size=1) + 
+                ggtitle("Group Two")
+
+
+histtotal <- ggplot(data=blocks, aes(blocks$weight)) + 
+                coord_cartesian(xlim = extendrange(blocks$weight), ylim = c(0,20)) + 
+                scale_y_continuous() + 
+                geom_histogram() + 
+                geom_vline(xintercept=mean(blocks$weight), linetype="dashed", 
+                color = "red", size=1) + 
+                ggtitle("Total")
+grid.arrange(hone, htwo, histtotal,  ncol = 1)
+```
+
+
+## (ii)
+
+```{r}
+boxplot(weight ~ group, xlab = "Group", data = blocks, col = "lightgrey")
+boxplot(perimeter ~ group, xlab = "Group", data = blocks, col = "lightgrey")
+
+```
+
+## (iii)
+
+
+```{r}
+a <- ppoints(length(bone$perimeter))
+b <- ppoints(length(btwo$perimeter))
+plot(x = a, y = sort(bone$weight), col = "red", xlab = "Proportion", ylab = "weight")
+par(new = TRUE)
+plot(x = b, y = sort(btwo$weight), col = "blue", xlab = "Proportion", ylab = "weight")
+
+
+
+
+```
+
+## (C)
+
+```{r}
+p <- l_plot(blocks$weight, blocks$perimeter)
+p["selected"] <- TRUE
+l_move_jitter(p)
+p["selected"] <- FALSE
+plot(p)
+p["swapAxes"] <- TRUE
+plot(p)
+
+```
+
+
+## (D)
+
+## (i)
+
+```{r}
+
+fit <- lm(weight ~ poly(perimeter), data = blocks)
+plot(fit, which = c(1,2))
+summary(fit)
+
+```
+
+
+## (ii)
+
+        
+```{r}
+source("power_xy.r")
+
+p.weight.perimeter <- with(blocks, power_xy(x=perimeter, y=weight, xlab="Perimeter", ylab="Weights", title = "Perimeter vs Weights"))
+ax = -0.1
+ay = -3.0
+fit <- lm(weight ^ ax ~ poly(perimeter ^ ay), data = blocks)
+plot(fit, which = c(1,2))
+summary(fit)
 
 ```
 
