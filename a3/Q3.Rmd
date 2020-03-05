@@ -1,6 +1,8 @@
 ---
 title: "Ram Yoogesh Gopu A3 - 20867060"
-output: pdf_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 ## Setting up 
@@ -55,7 +57,7 @@ for(val in totblock)
 
 
 hist(totW,col = "blue",main = "Students Selected Weights",xlab = "Block Weights")
-abline(v = avg_weight, col="red")
+abline(v = avgW, col="red")
 legend("topleft", c("Avg weight Block"), fill=c("red"))
 
 ```
@@ -70,7 +72,7 @@ for(i in 1:nrow(students)){
   }
   ato_v <- c(ato_v,val/10) }
 
-students$avg_W <- l
+students$avg_W <- ato_v
 students$sampE <- mean(blocks$weight) - students$avg_W
 judgmentErr <- data.frame(students$studentID, students$sampE)
 judgmentErr$students.sampE <- abs(judgmentErr$students.sampE)
@@ -124,8 +126,8 @@ maxStudent_Sd <- students[MaxSD,1]
 min_sd_v <- min(sd_v)
 max_sd_v <- max(sd_v)
 
-cat("Student Id: ", min_sd_stud, " has small sample SD - ", min_sd_v)
-cat("\nStudent id: ", max_sd_stud, " has large sample SD -", max_sd_v)
+cat("Student Id: ", minStudent_Sd, " has small sample SD - ", min_sd_v)
+cat("\nStudent id: ", maxStudent_Sd, " has large sample SD -", max_sd_v)
 
 MinSD_weights <- c()
 MinSD_peri <- c()

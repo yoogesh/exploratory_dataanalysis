@@ -1,6 +1,8 @@
 ---
 title: "Ram Yoogesh Gopu A3 - 20867060"
-output: pdf_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 ## Setting up 
@@ -130,10 +132,9 @@ sampleMSEStrat <- mean(sapply(stratifiedSampleAves, function(x)
 
 ```
 
-
+### (iii)
 ```{r}
-hist(sampleErrorsStrat, col = "Blue", main = "Sample Errors from Stratified Sampling", xlab = "Sample errors",          xlim= c(-20,20)
-)
+hist(sampleErrorsStrat, col = "Blue", main = "Sample Errors from Stratified Sampling", xlab = "Sample errors", xlim= c(-20,20))
 abline(v = sampleBias, col="red", lwd=2)
 legend("topleft", c("SampleBias"), fill=c("red"))
 
@@ -197,7 +198,7 @@ legend("topleft", c("SampleBias"), fill=c("red"))
 
 ## (iv)
 
-## I would say yes . 
+## I would say it is true . 
 
 
 ## (D)

@@ -1,6 +1,8 @@
 ---
 title: "Ram Yoogesh Gopu A3 - 20867060"
-output: pdf_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 
@@ -201,7 +203,7 @@ plot(fit, which = c(1,2))
 summary(fit)
 
 ```
-
+## Here we fit the model , though the line doesnt fit all the points perfectly , it does cover up most of the lien. So i can say that the variability is really low. 
 
 ## (ii)
 
@@ -218,3 +220,11 @@ summary(fit)
 
 ```
 
+## (iii)
+## We can infer from the first line that there is no proper fit , and it seems to have a patters. On the contrary we can see that the second line fits very well , i.e Most of the points are near the line. Hence we can say that the adjusted R square will be high for the first line. So i would choose the second model. 
+
+
+
+## (iv)
+
+## There is no meaning in it. Because for the same value of the perimeter, we tend to have larger surface area for different 2 different blocks. 
