@@ -3,3 +3,112 @@ title: "A4 - Q1 (Ram Yoogesh Gopu - 20867060)"
 output: pdf_document
 ---
 
+## READING THE DATA 
+```{r}
+lizards <- read.csv("AnolisLizards.csv", header = TRUE)
+```
+
+## Printing it 
+```{r}
+lizards
+```
+
+## (A)
+
+### Archipelago of bimini, expecially bahaman fauna which contains all the lizzrd is the target population 
+### Various species of lizards form the units. 
+
+## (B)
+
+## (i)
+## (ii)
+## (iii)
+## (iv)
+## (v)
+
+
+## (C)
+## (i)
+
+```{r}
+lizardsTable <- xtabs(count ~ perch_diameter_inches + perch_height_ft + species, data = lizards)
+lizardsTable
+lizardsTable[,1,]
+lizardsTable[2,,]
+```
+
+## (ii)
+```{r}
+sagrei <- sum(lizardsTable[,,2])   
+angusticeps <- sum(lizardsTable[,,1])
+
+print("Sagrei sum")
+print(sagrei)
+print("anguticeps sum")
+print(angusticeps)
+
+# 1 and 2 is gonna provide the count of diameter and height 
+margin.table(lizardsTable, 3)
+
+
+```
+
+
+
+## (d)
+## (i)
+
+```{r}
+library(eikosograms)
+lizardsHabitat <- xtabs(count ~perch_diameter_inches + perch_height_ft, data = lizards)
+lizardsHabitat
+eikos("perch_height_ft", "perch_diameter_inches" , data = lizardsHabitat)
+```
+
+
+```{r}
+summary(lizardsHabitat)
+```
+
+## EXP 
+
+
+## (ii)
+```{r}
+
+eikos("perch_height_ft", "perch_diameter_inches", data = lizardsTable[,,2])
+summary(lizardsTable[,,2])
+chisq.test(lizardsTable[,,2], p = 0.022)
+```
+
+
+
+## (iii)
+
+```{r}
+eikos("perch_height_ft",  "perch_diameter_inches", data = lizardsTable[,,1])
+summary(lizardsTable[,,1])
+chisq.test(lizardsTable[,,1], p = 0.33)
+```
+
+
+## exp 
+
+## (iv)
+
+```{r}
+eikos("perch_diameter_inches",  "species" , data = lizardsTable[,1,])
+summary(lizardsTable[,1,])
+chisq.test(lizardsTable[,1,], p = 0.33)
+
+```
+
+```{r}
+#eikos(perch_diameter_inches ~ species, data = lizardsTable[2,,], main = "less than 4.25")
+eikos(perch_height_ft ~ species, data = lizardsTable[2,,], main = "less than 4.25")
+summary(lizardsTable[2,,])
+chisq.test(lizardsTable[2,,], p = 0.33)
+```
+
+
+## (E)
