@@ -1,0 +1,17 @@
+"Age","Sex","Treatment","Outcome","Freq"
+"20-39","Male","A","Recovered",60
+"40-59","Male","A","Recovered",90
+"20-39","Female","A","Recovered",270
+"40-59","Female","A","Recovered",540
+"20-39","Male","B","Recovered",450
+"40-59","Male","B","Recovered",60
+"20-39","Female","B","Recovered",240
+"40-59","Female","B","Recovered",50
+"20-39","Male","A","Died",40
+"40-59","Male","A","Died",210
+"20-39","Female","A","Died",30
+"40-59","Female","A","Died",360
+"20-39","Male","B","Died",450
+"40-59","Male","B","Died",240
+"20-39","Female","B","Died",60
+"40-59","Female","B","Died",50
