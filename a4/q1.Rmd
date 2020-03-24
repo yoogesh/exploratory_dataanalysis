@@ -14,17 +14,25 @@ lizards
 ```
 
 ## (A)
-
 ### Archipelago of bimini, expecially bahaman fauna which contains all the lizzrd is the target population 
 ### Various species of lizards form the units. 
 
 ## (B)
 
 ## (i)
+### Units are the lizards in the population. Study are the entire species of lizards (4 species), from the bahaman fauna.
+
 ## (ii)
+### The variates are Species, perch_height_ft, perch_diameter_inches, count. Respose variate is species. Explonatory variates are perch_height_ft and perch_diameter_inches 
+
 ## (iii)
+### On a general note, sampling plan provides an outline on which the research is conducted. It gives us information on which category we should survey, what should be the sample size, and also how to choose the respondents from the population. So for our problem description, the sample plan is the collection of data about the lizards (Sagrei and angusticeps) and theier relevant details(perch_height_ft and perch_diameter_inches) which was recorded between 9:00AM to 4:40PM during the period of november.
+
 ## (iv)
+### once we elicit the data about the lizards, namely perch_height_ft and perch_diameter_inches  which are further divided into categorical variables (perch_height_ft " >=3 or <3" and perch_diamter_inches "<=4.25 or >4.25" )
+
 ## (v)
+### This is observational since we just observe the details of the lizards
 
 
 ## (C)
@@ -70,7 +78,7 @@ eikos("perch_height_ft", "perch_diameter_inches" , data = lizardsHabitat)
 summary(lizardsHabitat)
 ```
 
-## EXP 
+## From the graph we can infer that, the lizards whose height is > 4.25 will mostly have height <3. lizards which have height < 4.25 will mostly be less than 3ft. Also the data is more skewed towards the lizards whose height is greater than 4.25
 
 
 ## (ii)
@@ -78,9 +86,9 @@ summary(lizardsHabitat)
 
 eikos("perch_height_ft", "perch_diameter_inches", data = lizardsTable[,,2])
 summary(lizardsTable[,,2])
-chisq.test(lizardsTable[,,2], p = 0.022)
+chisq.test(lizardsTable[,,2], simulate.p.value = TRUE)
 ```
-
+### After performing chisq on species sageri we can see that the p-value is 0.423. This explains that both the perch height and perch diameter are independent. Also, the height of the lizards are more likely to be <3. But its advisable to choose the lizards > 4.25 in diameter
 
 
 ## (iii)
@@ -88,27 +96,30 @@ chisq.test(lizardsTable[,,2], p = 0.022)
 ```{r}
 eikos("perch_height_ft",  "perch_diameter_inches", data = lizardsTable[,,1])
 summary(lizardsTable[,,1])
-chisq.test(lizardsTable[,,1], p = 0.33)
+chisq.test(lizardsTable[,,1], simulate.p.value = TRUE)
 ```
 
 
-## exp 
+## This graph is more skewed towards the angusticeps lizards whose height >=3 and diameter >4.25. P values are kind of absurd because the pvalue is 0.02, which signifies that both the height and diameter are related to each other. Whereas p-value 0.07 (Which is just above the signifance level 0.5) defines that both the height and the diameter are indpendent of each other.  So the interpretations doesnt agree.  
 
 ## (iv)
 
 ```{r}
-eikos("perch_diameter_inches",  "species" , data = lizardsTable[,1,])
-summary(lizardsTable[,1,])
-chisq.test(lizardsTable[,1,], p = 0.33)
-
+eikos("perch_height_ft",  "species" , data = lizardsTable[1,,])
+summary(lizardsTable[1,,])
+chisq.test(lizardsTable[1,,], simulate.p.value = TRUE)
 ```
+### the p-value is 7.005e-08, explains that both the variates (diameter and species) are not indepedent of each other. The xsquared p-value also proves the same.Also we can say that the angusticeps lizards are mostly of height >= 3 and sargeri lizards are mostly of length < 3. 
 
+
+## (V)
 ```{r}
-#eikos(perch_diameter_inches ~ species, data = lizardsTable[2,,], main = "less than 4.25")
-eikos(perch_height_ft ~ species, data = lizardsTable[2,,], main = "less than 4.25")
-summary(lizardsTable[2,,])
-chisq.test(lizardsTable[2,,], p = 0.33)
+eikos("perch_diameter_inches", "species", data = lizardsTable[,2,])
+summary(lizardsTable[,2,])
+chisq.test(lizardsTable[,2,], simulate.p.value = TRUE)
 ```
-
+### p-value is 0.001 (which is really low) signifies that both the variates (perch_height and species) are not indpendent of each other. x squared p-value is 0.00049 which is still less than 0.5, also signifies the same that the variates are not independent of each other. Also we can say that the angusticeps lizards are mostly of height >= 3 and sargeri lizards are mostly of length < 3. 
 
 ## (E)
+
+### As explained previously that the angusticeps are mostly with height >= 3 and diameter < 4.25. May be this might be the reason that the lizard is named so. 
