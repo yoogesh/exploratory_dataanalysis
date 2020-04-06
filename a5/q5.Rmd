@@ -1,6 +1,8 @@
 ---
 title: "A5 (Q5) - Ram Yoogesh Gopu(20867060)"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 
@@ -147,6 +149,4 @@ print(sd(avg_reps))
 
 # (G)
 
-### Since Z is a lurking variable for the above problem, it is clear that it has a fixed value(hyperplane)
-
-Since Z is a lurking variable for the above problem it is clear that, it has a fixed value which fixes (hyperplane). This has a effect on the values of y. Due to this the y is being restricted to take the values. 
+### Since Z is a lurking variable for the above problem, it is clear that it has a fixed value which fixes (hyperplane). This has an effect on the values of y. Also, there would be different y values when we change Z. Furthermore, the hyperplane and the height of the markers imposes a constraint on y. 

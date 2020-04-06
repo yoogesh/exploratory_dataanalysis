@@ -111,4 +111,4 @@ print(estimates)
 
 # (F)
 
-### Since Z is a lurking variable for the above problem it is clear that, it has a fixed value which fixes (hyperplane). This has a effect on the values of y. Due to this the y is being restricted to take the values. 
+###  Since Z is a lurking variable for the above problem, it is clear that it has a fixed value which fixes (hyperplane). This has an effect on the values of y. Also, the hyperplane and the height of the markers imposes a constraint on y.  
