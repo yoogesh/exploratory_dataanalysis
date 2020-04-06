@@ -1,8 +1,7 @@
 ---
-title: "R Notebook"
+title: "A5 - Ram Yoogesh Gopu (20867060)"
 output:
   pdf_document: default
-  html_notebook: default
 ---
 
 
@@ -31,23 +30,23 @@ library(MASS)
 data(geyser)
 ```
 
-## (A)
+# (A)
 
 ### The target population constitutes of all the eruptions from the Yellowstone National park. Individual unit is eruption. This eruption is constituted by by both waiting time and the duration. 
 
-## (B)
+# (B)
 
 ### Study population considers all the eruptions that has taken place till date. Individual unit is eruption. There might be study error because of various external factors such as the temperature during the study. 
 
-## (C)
+# (C)
 
 ### The dataset which was recorded from August 1st to August 15th, 1985 has 299 observations (Waiting time and the duration) which constitutes as the sample S. Individual Unit is eruption. There might be sample error because of the various factors which will affect the eruptions.
 
-## (D)
+# (D)
 
 ### There are various ways in which it might produce sampling bias, (i.e) time, geological factors, temperature could affect the process and would fail to be accurate. 
 
-## (E)
+# (E)
 
 ## (i)
 
@@ -66,15 +65,15 @@ data(geyser)
 ### Similarly, the waiting time would be high for the eruption if the previous waiting time is less, which means they are dependent. On the contrary they are not dependent if the time is vice versa. So it should be interesting to understand the relationship between these two variates. 
 
 
-## (F)
+# (F)
 
 ### From the dataset, the other variate which would be of potential interest is the time required to finish the steaming process. 
 
-## (G)
+# (G)
 
 ### one of the problems would be the lack of exact timings which will lead to wrong conclusions. 
 
-## (H)
+# (H)
 
 ```{r}
 digits <- function(number) {
@@ -97,7 +96,7 @@ chisq.test(digits(h2))
 ### So from the results we can conclude that the p-value is really low (0.05), and the null hypothesis is rejected for H_d (Which means that it doesnt follow a U[0,1] distribution). Furthermore the p-value is > 0.05 and the null hypotheis is considered for H_w (the rightmost digit of the waiting time equiprobably any of the digits 0, 1, 2)
 
 
-## (I)
+# (I)
 
 ```{r}
 dt <- ppoints(geyser$duration)
@@ -112,7 +111,7 @@ plot(wt, sort(geyser$waiting), col = "green", ylab = "values recorded", xlab = "
 qqplot(geyser$duration, geyser$waiting)
 ```
 
-## (J)
+# (J)
 
     ```{r transform2uniform}
     transform2uniform <- function(x, 
@@ -150,7 +149,7 @@ lineup(k2, generateSubject = mixCoords, showSubject = showScatter)
 
 ### for K = 22 from plot 2, there is a lack of pattern, which conveys that both are indpendent. i.e there is no evidence against the hypothesis. 
 
-## (K)
+# (K)
 
 ```{r}
 source("graphicalTests.R")

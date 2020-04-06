@@ -1,0 +1,189 @@
+---
+title: ' A5 - Ram Yoogesh Gopu (20867060)'
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 7,
+                      out.height = "40%")
+set.seed(12314159)
+library(loon.data)
+library(loon)
+library(gridExtra)
+
+imageDirectory <- "./img"
+dataDirectory <- "./"
+path_concat <- function(path1, ..., sep="/") paste(path1, ..., sep = sep)
+
+source("graphicalTests.R")
+source("numericalTests.R")
+source("generateData.R")
+```
+
+
+# (1)
+
+### Reading the data
+
+```{r}
+labData <- read.csv("labData.csv")
+```
+
+# (A)
+
+```{r}
+
+results <- data.frame((labData[(labData$type == "randomized" | labData$type == "observational") & labData$rep == 1,]), row.names = NULL)
+
+```
+
+
+# (2)
+
+# (B)
+
+## (i)
+
+```{r}
+Bmod <- lm(y ~ x, results)
+summary(Bmod)
+```
+
+## (ii)
+
+### From the p-value (which is 0.3111) greater than 0.05, we can conclude that it is not strong to oppose the hypothesis. 
+
+## (iii)
+
+```{r}
+numericalTest(results, discrepancyFn = slopeDiscrepancy, generateFn = mixCoords)
+```
+
+### The p-value (0.32, which is greater than 0.05 ) indicates that its not strong to oppose the hypothesis that X,Y are independent. 
+
+
+## (iv)
+```{r}
+numericalTest(results, discrepancyFn = correlationDiscrepancy, generateFn = mixCoords)
+```
+
+
+### Similarly, change in X doesnt result in change in Y, because the p-value (0.3145, which is greater than 0.05 ) indicates that its not strong to oppose the hypothesis.
+
+
+## (V)
+
+### From the above tests, we can conclude that there is no casual effect. We can conclude that change in X doesnt result in change in Y. This is because of the fact that the P-value is larger in all cases , hence we coudnt oppose the hypothesis. 
+
+
+# (C)
+
+## (i)
+
+
+```{r}
+Cmod <- lm (y ~ x, data = results[results$type == "observational", ])
+summary(Cmod)
+```
+
+## (ii)
+
+### since the p-value is very small (less than 0.05), it is a strong proof against the hypothesis. Also another way to look at is that the beta_1 is negative, which results in decrease of value y with increase in X.
+
+
+## (iii)
+
+```{r}
+resval <- results[results$type=="observational", ]
+samobs <- data.frame(x = resval$x, y = resval$y)
+numericalTest(samobs, discrepancyFn = slopeDiscrepancy, generateFn = mixCoords)
+```
+
+### It is a strong evidence against the null hypothesis, since p-value is 0. It also gives a strong evidence that X and Y are not independent of each other.
+
+
+## (iv)
+
+```{r}
+numericalTest(samobs, discrepancyFn = correlationDiscrepancy, generateFn = mixCoords)
+```
+
+### It is a strong evidence against the null hypothesis, since p-value is 0. It also gives a strong evidence that X and Y are not independent of each other and their correlation cofficient is non-zero between X and Y. 
+
+## (V)
+
+### From all the tests we can conclude that there is a casual relation between X and Y. Also a strong evidence that X and Y are not independent of each other from p-value which is 0 as inferred from the above tests. Also from the summary beta_1 is negative, which is a strong evidence that states that increase in value of X results in decrease of value Y.
+
+
+# (D)
+
+## (i)
+
+```{r}
+Dmod <- lm(y~x, data = results[results$type == "randomized", ])
+summary(Dmod)
+```
+
+## (ii)
+
+### Since the p-value is ver less (than 0.05), there is a strong evidence against the hypothesis beta_1 = 0.
+
+## (iii)
+
+```{r}
+resval_2 <- results[results$type == "randomized", ]
+samdobs <- data.frame(x = resval_2$x, y = resval_2$y)
+numericalTest(samdobs, discrepancyFn = slopeDiscrepancy, generateFn = mixCoords)
+```
+### Since the p-value is 0, this is a strong evidence against the NUll hypothesis. This also means that X and Y won't be independent. 
+
+## (iv)
+
+```{r}
+numericalTest(samdobs, discrepancyFn = correlationDiscrepancy, generateFn = mixCoords)
+```
+
+### Since the p-value is again 0, this is a strong evidence against the null hypothesis. Also the correlation cofficient will be non-zero, which infers that X and Y will be correlated. 
+
+## (V)
+
+### From the above tests we can conclude that there is a casual relation between X and Y. Also from the summary beta_1 is postive, which is also a evidence suggesting the increase in value of X results in increase in value of Y. 
+
+
+# (3)
+
+# (E)
+
+### A lurking variable is a variable on which we don't have contol over, which can affect the observed relationships between measured variables and may also cause bias in our results. In the above experiment, Z is a lurking variable.The equation of the plane has 3 variables, and its difficult to specifiy the relationship between the two variables if the other one is kept constant. 
+
+# (F)
+
+### We cannot come up with a conclusion about the relationship between X and Y when all the data is combines. But the relationship from "observational" and "randomized" data are producing different effects. So, for the observational data, the casual effect is negative, which states that the increase in value of X decreases the value of Y. For the randomized data, the casual effect is positive, which states that the increase in value of X increases the value of Y. 
+
+
+# (G)
+
+### From the experiments we can conclude that Correlation isn't enough. This is because, when we used the whole data, it explained that there was no relationship between X and Y. On the contrary, when we performed the experiments on the seperated datasets, (observational and randomized) gave us the conclusion that there was relationship between X and Y (Positive and Negative). Hence we can conclude that if we just use the result of an experiment combining large volumes of data, we may lose some important relationships in the data. 
+
+# (H)
+
+### We will end up in wrong conclusions if we use the whole data and we wont be able to indetify the relationships in the subgroups of data which could be dangerous. So we can conclude that , one must focus on meaningful insights rather than more data. 
+
+
+
+
+
+
+
+
+
