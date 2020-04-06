@@ -1,0 +1,338 @@
+---
+title: "Correlation, causation, and sample size"
+output:
+  pdf_document:
+    keep_tex: no
+    latex_engine: xelatex
+    number_sections: yes
+  html_document:
+    toc: yes
+  word_document: default
+urlcolor: blue
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{epic}
+- \usepackage{color}
+- \usepackage{hyperref}
+- \usepackage{multimedia}
+- \newcommand{\ve}[1]{\mathbf{#1}}
+- \newcommand{\pop}[1]{\mathcal{#1}}
+- \newcommand{\samp}[1]{\mathcal{#1}}
+- \newcommand{\subspace}[1]{\mathcal{#1}}
+- \newcommand{\sv}[1]{\boldsymbol{#1}}
+- \newcommand{\sm}[1]{\boldsymbol{#1}}
+- \newcommand{\tr}[1]{{#1}^{\mkern-1.5mu\mathsf{T}}}
+- \newcommand{\abs}[1]{\left\lvert ~{#1} ~\right\rvert}
+- \newcommand{\size}[1]{\left\lvert {#1} \right\rvert}
+- \newcommand{\norm}[1]{\left|\left|{#1}\right|\right|}
+- \newcommand{\field}[1]{\mathbb{#1}}
+- \newcommand{\Reals}{\field{R}}
+- \newcommand{\Integers}{\field{Z}}
+- \newcommand{\Naturals}{\field{N}}
+- \newcommand{\Complex}{\field{C}}
+- \newcommand{\Rationals}{\field{Q}}
+- \newcommand{\widebar}[1]{\overline{#1}}
+- \newcommand{\wig}[1]{\tilde{#1}}
+- \newcommand{\bigwig}[1]{\widetilde{#1}}
+- \newcommand{\leftgiven}{~\left\lvert~}
+- \newcommand{\given}{~\vert~}
+- \newcommand{\indep}{\bot\hspace{-.6em}\bot}
+- \newcommand{\notindep}{\bot\hspace{-.6em}\bot\hspace{-0.75em}/\hspace{.4em}}
+- \newcommand{\depend}{\Join}
+- \newcommand{\notdepend}{\Join\hspace{-0.9 em}/\hspace{.4em}}
+- \newcommand{\imply}{\Longrightarrow}
+- \newcommand{\notimply}{\Longrightarrow \hspace{-1.5em}/ \hspace{0.8em}}
+- \newcommand*{\intersect}{\cap}
+- \newcommand*{\union}{\cup}
+- \DeclareMathOperator*{\argmin}{arg\,min}
+- \DeclareMathOperator*{\argmax}{arg\,max}
+- \DeclareMathOperator*{\Ave}{Ave\,}
+- \newcommand{\suchthat}{~:~}
+- \newcommand{\st}{~:~} 
+- \newcommand{\code}[1]{\texttt{#1}}
+- \newcommand*{\Rnsp}{\textsf{R}}
+- \newcommand*{\R}{\textsf{R}$~$}
+- \newcommand*{\loonnsp}{\textsf{loon}}
+- \newcommand*{\loon}{\textsf{loon}$~$}
+- \newcommand*{\Pythonnsp}{\textsf{Python}}
+- \newcommand*{\Python}{\textsf{Python}$~$}
+- \newcommand*{\Tclnsp}{\textsf{Tcl}}
+- \newcommand*{\Tcl}{\textsf{Tcl}$~$}
+- \newcommand{\pkg}[1]{\textsf{#1}}
+- \newcommand{\pkgsp}[1]{\textsf{#1}$~$}
+- \newcommand{\lpart}[1]{\textsf{#1}}
+- \newcommand{\lpartsp}[1]{\textsf{#1}$~$}
+- \newcommand{\togglepause}{\pause}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 7,
+                      out.height = "40%")
+set.seed(12314159)
+library(loon.data)
+library(loon)
+library(gridExtra)
+
+codeDirectory <- "../R"
+imageDirectory <- "./img"
+dataDirectory <- "./data"
+path_concat <- function(path1, ..., sep="/") paste(path1, ..., sep = sep)
+```
+
+```{r load functions, echo = FALSE}
+source(file = "numericalTests.R", echo = FALSE)
+source(file = "graphicalTests.R", echo = FALSE)
+source(file = "generateData.R", echo = FALSE)
+```
+
+---
+
+\normalsize
+**43 marks**
+
+In the May/June 2013 issue of the publication *Foreign Affairs*, Kenneth Cukier (Data Editor of *The Economist*) and Viktor Mayer-Schoenberger (Professor of "Internet Governance and Regulation" at the *Oxford Internet Institute*) wrote a paper called ["The Rise of Big Data: How It’s Changing the Way We Think About the World"](https://www.jstor.org/stable/23526834).  
+
+There, they write that modern times require ``three profound changes in how we approach data.
+
+\footnotesize
+\begin{quotation}
+``The first is to collect and use a lot of data rather than settle for small amounts or samples, as statisticians have done for well over a century. The second is to shed our preference for highly curated and pristine data and instead accept messiness: in an increasing number of situations, a bit of inaccuracy can be tolerated, because the benefits of using vastly more data of variable quality outweigh the costs of using smaller amounts of very exact data. Third, in many instances, we will need to give up our quest to discover the cause of things, in return for accepting correlations. With big data, instead of trying to understand precisely why an engine breaks down or why a drug's side effect disappears, researchers can instead collect and analyze massive quantities of information about such events and everything that is associated with them, looking for patterns that might help predict future occurrences. Big data helps answer what, not why, and often that's good enough.''
+\end{quotation}
+
+\normalsize
+In has become a popular sentiment that "the more data the better,"  even if it is of "variable quality" and whatever its "messiness" might be.  The what, if not the why, of a causal relation might yet be determined from such data.   
+
+To investigate these ideas, you will be exploring some of the data that was measured in the physical laboratory.  (Background on the lab and its experimental protocols are described in the document `labBackground`.)  Three variables $x$, $y$, and $z$, are linearly related (lie on a plane) and the value of any two determine (or cause) the value of the third.  That is, 
+\[ y = \alpha + \beta x + \gamma z \]
+Changing only one of the variables, $x \rightarrow x + \Delta x$, while holding a second, $z$, fixed at some value, will *cause* the third to change, $y \rightarrow y + \Delta y$ in response.  We understand that changes in $x$ *cause* changes in $y$.  Moreover, in this instance, that change is $\Delta y = \beta \times \Delta x$ and $x$ can cause changes in $y$ if and only if $\beta \ne 0$.  If non-zero, the sign and magnitude of $\beta$ determine the nature of the causal relationship.
+
+Typically not all of the variables in a causal relationship are recorded.  In the physical laboratory, only values of $x$ and $y$ were collected; no values of $z$ (though these too were changing).  What separated the `type`s was *how the data were collected*.
+
+Of interest, is to determine what we can learn from the data, if anything, about the value of $\beta$ and hence about the causal relationship between $x$ and $y$.
+
+\newpage
+
+# Data
+
+Set up the following:
+
+\footnotesize
+```{r pathSetup, eval = FALSE}
+## Set this up for your own directory
+imageDirectory <- "MyAssignmentDirectory/img"  # e.g. in current "./img"
+dataDirectory <- "MyAssignmentDirectory/data"  # e.g. in current "./data"
+path_concat <- function(path1, ..., sep="/") paste(path1, ..., sep = sep)
+```
+
+\normalsize 
+and then read in the data as:
+
+\footnotesize
+```{r load data}
+labData <- read.csv("labData.csv")
+```
+\normalsize
+
+Interest here lies **only** in that subset of the data where:
+
+- `type` is either `"observational"` **or** `"randomized"`, **and**
+- `rep` is 1
+
+The result should be a `data.frame` having five variables and 216 rows (108 for each `type`).   The value of `rep` should be 1 for all rows and the value of `type` should only be one of the two mentioned above.
+
+
+a. *(2 marks)*  Construct the `data.frame` described above.  Assign it to the variable `results`.  Show your code.
+
+```{r, eval = TRUE}
+results <- data.frame((labData[(labData$type == "randomized" | labData$type == "observational") 
+                               & labData$rep == 1,]), row.names = NULL)
+```
+
+# Analysis
+
+The dataset `results` from part (a) contains 216 $(x, y)$ pairs, half of which are of `type` `"observational"` and half of which are of `type` `"randomized`".  To address the problem of whether changes in $x$ cause changes in $y$ you will pursue fitting a straight line model to the data of the form
+\[y = \beta_0 + \beta_1 x + r \]
+where $r$ is the residual representing the fact that $y$ and $x$ need not lie exactly on a line.  All fitting will be done by least-squares using the `lm()` function from \R.  
+
+Of interest will be the hypothesis $H_0: \beta = 0$.  As a surrogate, we will use the model to test $H_0: \beta_1 = 0$ and to provide estimates for $\beta_1$ in place of estimates of $\beta$.
+
+**Note** that parts (b), (c), and (d) are identical, the difference lies in which data are used.
+
+b. Following Cukier's and Mayer-Schoenberger's advice, here you will use **all** of the data in `results`.
+
+i.  *(2 marks)* Fit a straight line model of $y$ to $x$ and print the `summary()` of the fitted model. Show your code.  
+
+```{r, eval = TRUE}
+fit <- lm(y~x, results)
+summary(fit)
+```
+
+```{r, fig.height = 3, fig.width = 3}
+hist(fit$residuals)
+```
+
+ii. *(1 mark)* What do you conclude from this summary about the evidence against the hypothesis $H_0: \beta_1 = 0$?  Justify your answer.
+
+Based on the p-value of the slope of the linear model (much larger than 5%), the evidence against the null hypothesis that the slope is 0 is weak.
+
+iii. *(3 marks)* Using the `numericalTest()` function, perform a test of the hypothesis of independence (that is, $H_0: X \indep Y$) based on the absolute value of the slope estimate as a discrepancy measure.  Show your code.
+
+```{r, eval = TRUE}
+mixCoords <- function(data) {
+  x <- data$x
+  y <- data$y
+  n <-length(x)
+  stopifnot(n== length(y))
+  new_y <-sample(y, n, replace=FALSE)
+  list(x=x, y=new_y)
+}
+
+slopeDiscrepancy <-function(data) {
+  fit <-lm(y~x, data = data)
+  abs(fit$coef[2])
+}
+
+coords <- data.frame(x = results$x, y = results$y) 
+
+numericalTest(coords, discrepancyFn = slopeDiscrepancy, 
+              generateFn = mixCoords)
+```
+The p-value (much larger than 5%) indicates that there is weak evidence against the null hypothesis that X and Y are independent. 
+
+iv. *(2 marks)* Repeat part (iii) above but now use the absolute value of the sample correlation as the discrepancy measure.  Show your code.
+
+What do you conclude about the hypothesis?  Justify your answer(s).
+
+```{r, eval = TRUE}
+correlationDiscrepancy <- function(data){
+  x <- data$x
+  y <- data$y
+  abs(cor(x,y))
+}
+
+numericalTest(coords, discrepancyFn = correlationDiscrepancy, 
+              generateFn = mixCoords)
+```
+There is weak evidence against the null hypothesis that the correlation coefficient is zero, based on the p-value (much larger than 5%). We do not accept or reject the null hypothesis, but can conclude that the evidence against it is weak.
+
+v. *(2 marks)*  What do the above empirical tests, based on **all** the data here, suggest one might conclude about the causal relation between $x$ and $y$?  If you have found a causal effect, in what direction would $y$ be expected to change if a value of $x$ were increased?  Justify your answers.
+
+Based on the numerical tests performed above, there is weak evidence against the null hypothesis that X and Y are independent, as indicated by the respective p-values of each test (all much larger than 5%). Therefore, I cannot conclude that there is any causal relation between about x and y.  
+
+c.  Now restrict the analysis to only that subset of `results` which has  `type` `"observational"`.  This analysis will be based on only 108 $(x, y)$ pairs.
+
+```{r, eval = TRUE}
+obs <- results[results$type == "observational",]
+```
+
+i.  *(2 marks)* Fit a straight line model of $y$ to $x$ and print the `summary()` of the fitted model. Show your code.  
+
+```{r, eval = TRUE}
+fit <- lm(y ~ x, obs)
+summary(fit)
+```
+
+ii. *(1 mark)* What do you conclude from this summary about the evidence against the hypothesis $H_0: \beta_1 = 0$?  Justify your answer.
+
+Based on the p-value of the slope (much smaller than 5%), there is strong evidence against the null hypothesis that the slope $\beta_1 = 0$.
+
+iii. *(3 marks)* Using the `numericalTest()` function, perform a test of the hypothesis of independence (that is, $H_0: X \indep Y$) based on the absolute value of the slope estimate as a discrepancy measure.  Show your code.
+
+```{r, eval = TRUE}
+obs_coords <- data.frame(x = obs$x, y = obs$y) 
+numericalTest(obs_coords, discrepancyFn = slopeDiscrepancy, 
+              generateFn = mixCoords)
+```
+
+What do you conclude about the hypothesis? Justify your answer.
+
+Based on the numerical test above, there is strong evidence against the null hypothesis that the variates are independent (as measured by a p-value of ~0). One could conclude with reasonable confidence that there is indeed a relationship between x and y - they are not independent. 
+
+iv. *(2 marks)* Repeat part (iii) above but now ise the absolute value of the sample correlation as the discrepancy measure.  Show your code.
+
+What do you conclude about the hypothesis? Justify your answer.
+
+```{r, eval = TRUE}
+numericalTest(obs_coords, discrepancyFn = correlationDiscrepancy, 
+              generateFn = mixCoords)
+```
+Based on the numerical test above, there is strong evidence against the null hypothesis that the variates have a correlation of zero (as measured by a p-value of ~0). Therefore, one can conclude with strong confidence that the correlation coefficient between X and Y is non-zero and there is a relationship between X and Y (they are not independent).
+
+v. *(2 marks)*  What do the above empirical tests, based on **only** the `"observational"` data here, suggest one might conclude about the causal relation between $x$ and $y$?  If you have found a causal effect, in what direction would $y$ be expected to change if a value of $x$ were increased?  Justify your answers.
+
+The observational data shows strong probability of a relationship between X and Y - that they are not independent, as measured by the p-values generated by the empirical tests. In this context, this means one could conclude with strong confidence that there is indeed a causal relationship between X and Y. 
+
+Using the summary of the linear model, the x-coefficient $\beta_1 = -0.41159$. There is strong evidence in favor of the slope value as noted by the corresponding p-value (very close to 0). This means that increases in the value of x cause decreases in the value of Y.  
+
+d.  Now restrict the analysis to only that subset of `results` which has  `type` `"randomized"`.  This analysis will be based on only 108 $(x, y)$ pairs.
+
+i.  *(2 marks)* Fit a straight line model of $y$ to $x$ and print the `summary()` of the fitted model. Show your code.  
+```{r, eval = TRUE}
+rnd <- results[results$type == "randomized",]
+fit <- lm(y~x, rnd)
+summary(fit)
+```
+
+ii. *(1 mark)* What do you conclude from this summary about the evidence against the hypothesis $H_0: \beta_1 = 0$?  Justify your answer.
+
+There is strong evidence against the null hypothesis that $H_0: \beta_1 = 0$, as noted by the p-value (much smaller than 5%) of the x-coefficient in the linear model summary. 
+
+iii. *(3 marks)* Using the `numericalTest()` function, perform a test of the hypothesis of independence (that is, $H_0: X \indep Y$) based on the absolute value of the slope estimate as a discrepancy measure.  Show your code.
+
+What do you conclude about the hypothesis? Justify your answer.
+```{r, eval = TRUE}
+rnd_coords <- data.frame(x = rnd$x, y = rnd$y) 
+numericalTest(rnd_coords, discrepancyFn = slopeDiscrepancy, 
+              generateFn = mixCoords)
+```
+There is very strong evidence against the null hypothesis $H_0: \beta_1 = 0$. The numerical test returned a p-value of ~0 (assuming rounding), indicating that the dataset almost certainly could not be generated under the null hypothesis and there is most likely a relationship between X and Y (with near certainty).
+
+iv. *(2 marks)* Repeat part (iii) above but now ise the absolute value of the sample correlation as the discrepancy measure.  Show your code.
+
+What do you conclude about the hypothesis? Justify your answer.
+
+```{r}
+numericalTest(rnd_coords, discrepancyFn = correlationDiscrepancy, 
+              generateFn = mixCoords)
+```
+Based on the numerical test above, there is strong evidence against the null hypothesis that the variates have a correlation of zero (as measured by a p-value of 0). Therefore, I can conclude that the correlation coefficient between X and Y is almost certainly non-zero and therefore there is most likely a relationship between X and Y with strong confidence.  
+
+v. *(2 marks)*  What do the above empirical tests, based on **only** the `"randomized"` data here, suggest one might conclude about the causal relation between $x$ and $y$?  If you have found a causal effect, in what direction would $y$ be expected to change if a value of $x$ were increased?  Justify your answers.
+
+The observational data suggests a relationship between X and Y - that they are not independent as measured by the p-values generated by the empirical tests. In this context, this means that there is most likely a causal relationship between X and Y. 
+
+Using the summary of the linear model, the x-coefficient $\beta_1 = 0.37037$. There is strong evidence in favor of the slope value as noted by the corresponding p-value (very close to 0). This means that increases in the value of x cause increases in the value of Y. 
+
+# Conclusions
+
+You have now conducted three separate analyses of the data.  Based on the results in these analyses, address the following.
+
+e. *(4 marks)*  What is meant by a "lurking" variable and how might it have shown up in this data?
+
+A lurking variable is a variable that is not measured or controlled for, that can impact the observed / measured relationships between other measured/known variables. In this experiment, Z is a lurking variable. It was not measured, but its values changed during different measurements and it obscured the relationships between X and Y, as the values changed throughout each measuring type. 
+
+For example, in our full dataset, we were unable to discern a relationship  between X and Y. But when we selected subsets of the data, we observed different relationships. Z added noise to our relationship of X and Y. 
+
+f. *(3 marks)* What conclusion do you draw about the causal relation, if any, between changes in $x$ and changes in $y$?  Justify your answer.
+
+Based on all of the data combined, we cannot draw a conclusion of the relationship between X and Y. The relationship from the observed data and the relationship from the random data are producing similar but opposite effects such that when combined, the evidence suggests that null hypothesis (independence) is true (as measured by various numerical tests' p-values). 
+
+The observed relationship depends largely on the lurking variable z, which took on many forms throughout the experiment (sorted from smallest to largest or randomly assigned), and was not controlled for. As a result, there is no way to know the "true" relationship, since this truth would depend on what values z is taking (which we are not controlling for). If z was strictly controlled, we would at least be able to determine the relationship under that specific Z value, but again, this may change as z takes on different values.
+
+g. *(2 marks)* In 2008, then editor of *Wired* magazine, Chris Anderson wrote in an article ["The End of Theory: The Data Deluge Makes the Scientific Method Obsolete"](https://www.wired.com/2008/06/pb-theory/):
+
+*There is now a better way. Petabytes allow us to say: "Correlation is enough."*
+
+Drawing on your analyses above, give an illustration as to why Chris Anderson might be mistaken, in spite of the volume of data observed.
+
+An example of this is how the initial analysis (using all data) suggested that there is no relationship between X and Y. The later experiments, where we had smaller, more curated datasets, showed that there is some form of relationship between X and Y, but with opposite relationships (negative and positive slopes) across the two experiments. This shows that if we simply use all data and accept the conclusions of analysis when combining large volumes of noisy, non-curated data, we can can lose sight of important relationships hidden in the data.
+
+
+h. *(2 marks)* Why might Cukier's and Mayer-Schoenberger's advice (quoted above) actually be dangerous? 
+
+Using vastly more data can mitigate our ability to identify meaningful subgroups in the data, which could allow us to identify relationships within the subgroups as well as identify the existence of an unknown lurking variate. How can one measure "accuracy" if we don't scrutinize in detail how all of the data was generated and measured, and think deeply about what could impact our analysis of the variates? This practice is dangerous. 
