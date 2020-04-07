@@ -1,5 +1,5 @@
 ---
-title: "A5 (Q5) - Ram Yoogesh Gopu(20867060)"
+title: "A5 (Q4) - Ram Yoogesh Gopu (20867060)"
 output:
   pdf_document: default
   html_notebook: default
@@ -37,14 +37,15 @@ labData <- read.csv("labData.csv")
 # (A)
 
 ```{r}
-randomizedBlock <- labData[labData$type == "randomizedBlock", ]
+randomized <- labData[labData$type == "randomized", ]
 ```
+
 
 # (B)
 
 ```{r}
-plot(randomizedBlock$x, randomizedBlock$y, xlim = c(0, 30), ylim = c(0, 40), pch = 19, col = adjustcolor("black", 0.3), main = "x, y pairs from all of randomizedBlock data", xlab = "x-values", ylab = "y-values")
-Bmod <- lm(y~x, randomizedBlock)
+plot(randomized$x, randomized$y, xlim = c(0, 30), ylim = c(0, 40), pch = 19, col = adjustcolor("black", 0.3), main = "x, y pairs from all of randomized data", xlab = "x-values", ylab = "y-values")
+Bmod <- lm(y~x, randomized)
 abline(Bmod)
 print("Value of slope estimate is")
 print(Bmod$coefficients[2])
@@ -55,12 +56,12 @@ print(Bmod$coefficients[2])
 ## (i)
 
 ```{r}
-rand1 <- randomizedBlock[randomizedBlock$rep == 1, ]
-rand2 <- randomizedBlock[randomizedBlock$rep == 2, ]
+rand1 <- randomized[randomized$rep == 1, ]
+rand2 <- randomized[randomized$rep == 2, ]
 ```
 
-
 ## (ii)
+
 
 ```{r warning=FALSE}
 # defining the vectors and arrays 
@@ -85,10 +86,11 @@ print(mean(betas2))
 
 ```
 
+
 ## (ii)
 
 ```{r}
-plot(slopes1, betas2, xlim = c(-1, 1), ylim = c(-1, 1), pch = 19, col = adjustcolor("black", 0.3), main = "Slopes for the 2 Reps from the RandomizedBlock", xlab = "Slopes of Rep 1", ylab = "Slopes of Rep 2")
+plot(slopes1, betas2, xlim = c(-1, 1), ylim = c(-1, 1), pch = 19, col = adjustcolor("black", 0.3), main = "Slopes for the 2 Reps from the Randomized Data", xlab = "Slopes of Rep 1", ylab = "Slopes of Rep 2")
 ```
 
 ## (iii)
@@ -99,7 +101,7 @@ numericalTest(sampobs, generateFn = mixCoords, discrepancyFn = slopeDiscrepancy)
 numericalTest(sampobs, generateFn = mixCoords, discrepancyFn = correlationDiscrepancy)
 ```
 
-### So from the outputs we can infer that the p-value is 0.2135 (slopeDiscrepancy) (greater than 0.05) which is not strong enough against the null hypothesis. Also, the p-value is 0.22 (correlationDiscrepancy) (greater than 0.05) which is not strong enough against the null hypothesis and the correlation cofficient must be a non-zero. 
+### So from the outputs we can infer that the p-value is 0.23 (slopeDiscrepancy) (greater than 0.05) which is not strong enough against the null hypothesis. Also, the p-value is 0.2685 (correlationDiscrepancy) (greater than 0.05) which is not strong enough against the null hypothesis and the correlation cofficient must be a non-zero. 
 
 
 ## (iv)
@@ -139,13 +141,15 @@ print("Standard deviation of slope estimates for both reps")
 print(sd(avg_reps))
 ```
 
+
+
 # (E)
 
-### From the study we can infer that the average slope estimates are closer to the true slope values. Hence, I would conclude that the quality of team slope estimates in randomizedBlock study is good and better than randomized and observational design.  
+### From the study we can infer that the average slope estimates are closer to the true slope values. Hence, I would conclude that the quality of team slope estimates in randomized study is good and better than observational design.  
 
 # (F)
 
-### From the output, we know that the average of replicates is 0.39444 which is quite close to the true value 0.5. This gives a better understanding of slope estimates instead of viewing a single repetition on a individual basis. Hence, this is more preferrable.
+### From the output, we know that the average of replicates is 0.36388 which is somewhat close to the true value 0.5. This gives a better understanding of slope estimates instead of viewing a single repetition on a individual basis. Hence, this is more preferrable.
 
 # (G)
 
