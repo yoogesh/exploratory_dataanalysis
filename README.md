@@ -1,3 +1,14 @@
-# STAT 847 - Exploratory Data Analysis 
+# Exploratory Data Analysis 
 
-This repository contains the assigment questions and implementations of the same. Exercises are implemented in R studio 
+### Typical top-level directory layout
+
+    .
+    ├── a1     # Assignment 1
+    ├── a2     # Assignment 2   
+    ├── a3          
+    ├── a4           
+    ├── a5                  
+    └── README.md
+
+ 
+Copyright © 2020 Ram Yoogesh Gopu
